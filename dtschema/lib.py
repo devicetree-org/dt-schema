@@ -592,7 +592,7 @@ class DTValidator(DTVal):
 
 
 def format_error(filename, error, verbose=False):
-    src = os.path.abspath(filename) + ':'
+    src = os.path.basename(filename) + ':'
     if error.linecol[0] >= 0 :
         src = src + '%i:%i:'%(error.linecol[0]+1, error.linecol[1]+1)
 
