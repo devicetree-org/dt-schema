@@ -59,7 +59,9 @@ class schema_group():
                        'required property' in error.message:
                         continue
 
-                    print(dtschema.format_error(filename, error, verbose=verbose))
+                    print(dtschema.format_error(filename, error,
+                                                nodename=nodename,
+                                                verbose=verbose))
         if show_unmatched and not node_matched:
             if 'compatible' in node:
                 if isinstance(node, ruamel.yaml.comments.CommentedBase):
