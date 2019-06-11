@@ -250,6 +250,10 @@ def fixup_schema(schema):
         return
 
     for k,v in schema.items():
+        # select is a subschema that we want to fixup
+        if k in ['select']:
+            fixup_schema(v)
+
         # If, then and else contain subschemas that we'll want to
         # fixup as well. Let's recurse into those subschemas.
         if k in ['if', 'then', 'else']:
