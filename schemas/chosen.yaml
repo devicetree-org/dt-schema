@@ -52,6 +52,21 @@ properties:
       the Linux EFI stub (which will populate the property itself, using
       EFI_RNG_PROTOCOL).
 
+  rng-seed:
+    allOf:
+      - $ref: types.yaml#definitions/uint8-array
+    description:
+      This property served as an entropy to add device randomness. It is parsed
+      as a byte array, e.g.
+
+      /{
+             chosen {
+                     rng-seed = <0x31 0x95 0x1b 0x3c 0xc9 0xfa 0xb3 ...>;
+             };
+      };
+
+      This random value should be provided by bootloader.
+
   linux,booted-from-kexec:
     type: boolean
     description:
