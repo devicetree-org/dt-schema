@@ -444,9 +444,6 @@ def process_schema(filename):
     if not 'properties' in schema.keys():
         schema['properties'] = {}
 
-    if not '$nodename' in schema['properties'].keys():
-        schema['properties']['$nodename'] = True
-
     # Add any implicit properties
     fixup_node_props(schema)
 
