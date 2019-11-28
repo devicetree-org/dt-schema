@@ -19,10 +19,12 @@ properties:
     contains:
       const: simple-bus
   ranges: true
+  dma-ranges: true
   "#address-cells":
     enum: [ 1, 2 ]
   "#size-cells":
     enum: [ 1, 2 ]
+
 
 patternProperties:
   # All other properties should be child nodes with unit-address and 'reg'
@@ -55,4 +57,9 @@ required:
   - compatible
   - "#address-cells"
   - "#size-cells"
-  - ranges
+
+anyOf:
+  - required:
+      - dma-ranges
+  - required:
+      - ranges
