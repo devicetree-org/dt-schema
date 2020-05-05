@@ -14,7 +14,7 @@ maintainers:
 
 properties:
   $nodename:
-    pattern: "^(bus|soc|axi|ahb|apb)(@[0-9a-f]+)?$"
+    pattern: "^([a-zA-Z][a-zA-Z0-9,+\\-._]+-bus|bus|soc|axi|ahb|apb)(@[0-9a-f]+)?$"
   compatible:
     contains:
       const: simple-bus
