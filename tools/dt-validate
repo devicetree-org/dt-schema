@@ -64,6 +64,14 @@ class schema_group():
                            'required property' in error.message:
                             continue
 
+                        # Disabled subnodes might not have all the required
+                        # properties filled in let's just ignore
+                        # any error message reporting a missing property.
+                        if error.message and \
+                           'status' in error.message and \
+                           'disabled' in error.message:
+                              continue
+
                         print(dtschema.format_error(filename, error,
                                                     nodename=nodename,
                                                     verbose=verbose), file=sys.stderr)
