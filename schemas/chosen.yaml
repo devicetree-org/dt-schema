@@ -83,6 +83,37 @@ properties:
       the address and the size, of the elf core header which mainly describes
       the panicked kernel\'s memory layout as PT_LOAD segments of elf format.
 
+  linux,low-memory-range:
+    allOf:
+      - $ref: types.yaml#definitions/uint64-array
+      - maxItems: 2
+    description: |
+      This property (arm64 only) holds a base address and size, describing a
+      limited region below 4G. Similar to "linux,usable-memory-range", it is
+      an another memory range which may be considered available for use by the
+      kernel.
+
+      This property describes a limitation: memory within this range is only
+      valid when also described through another mechanism that the kernel
+      would otherwise use to determine available memory (e.g. memory nodes
+      or the EFI memory map). Valid memory may be sparse within the range.
+
+      / {
+              chosen {
+                      linux,low-memory-range = <0x0 0x70000000 0x0 0x10000000>;
+                      linux,usable-memory-range = <0x202f 0xc0000000 0x0 0x40000000>;
+              };
+      };
+
+      The main usage is for crash dump kernel devices when reserving crashkernel
+      above 4G. When reserving crashkernel above 4G, there may be two crash kernel
+      regions, one is below 4G, the other is above 4G. In order to distinct from
+      the high region, use this property to pass the low region.
+
+      While this property does not represent a real hardware, the address
+      and the size are expressed in #address-cells and #size-cells,
+      respectively, of the root node.
+
   linux,usable-memory-range:
     allOf:
       - $ref: types.yaml#definitions/uint64-array
