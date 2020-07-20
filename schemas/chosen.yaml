@@ -176,6 +176,25 @@ properties:
       "linux,stdout-path" and "stdout" properties are deprecated. New platforms
       should only use the "stdout-path" property.
 
+  linux,ima-kexec-buffer:
+    allOf:
+      - $ref: types.yaml#definitions/uint64-array
+      - maxItems: 2
+    description: 
+      This property(currently used by powerpc, arm64) holds the memory range,
+      the address and the size, of the IMA measurement logs that are being carried
+      over to the kexec session.
+
+      / {
+          chosen {
+              linux,ima-kexec-buffer = <0x9 0x82000000 0x0 0x00008000>;
+                  };
+        };
+
+      This porperty does not represent real hardware, but the memory allocated for
+      carrying the IMA measurement logs. The address and the suze are expressed in
+      #address-cells and #size-cells, respectively of the root node.
+
 patternProperties:
   "^framebuffer": true
 
