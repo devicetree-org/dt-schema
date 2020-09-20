@@ -37,3 +37,11 @@ properties:
 required:
   - gpio-hog
   - gpios
+
+oneOf:
+  - required:
+    - input
+  - required:
+    - output-high
+  - required:
+    - output-low
