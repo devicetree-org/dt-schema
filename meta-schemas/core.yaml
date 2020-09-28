@@ -16,6 +16,7 @@ definitions:
       - $ref: "#definitions/core-properties"
       - $ref: "clocks.yaml#"
       - $ref: "gpios.yaml#"
+      - $ref: "graph.yaml#"
       - $ref: "interrupts.yaml#"
       - $ref: "reset.yaml#"
       - $ref: "mailbox.yaml#"

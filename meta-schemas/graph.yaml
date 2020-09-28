@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright 2020 Arm Ltd.
+%YAML 1.2
+---
+$id: "http://devicetree.org/meta-schemas/graph.yaml#"
+$schema: "http://json-schema.org/draft-07/schema#"
+
+properties:
+  ports:
+    if:
+      properties:
+        type:
+          const: object
+      required:
+        - type
+    then:
+      propertyNames:
+        enum: [ description, type, properties, patternProperties, $ref, required, unevaluatedProperties ]
+      properties:
+        $ref:
+          const: /schemas/graph.yaml#/properties/ports
+
+        properties:  # keyword in schema
+          patternProperties:
+            '^port(@[0-9a-f]+)?$':
+              properties:
+                $ref: false
+              required:
+                - description
+
+          additionalProperties: false
+
+      required:
+        - $ref
+        - properties
+
+  port:
+    propertyNames:
+      enum: [ additionalProperties, description, type, properties, patternProperties, $ref, required, unevaluatedProperties  ]
+    properties:
+      $ref:
+        const: /schemas/graph.yaml#/properties/port
+
+    required:
+      - $ref
