@@ -1,0 +1,44 @@
+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/iio/iio-consumer.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Generic IIO consumer-bindings
+
+maintainers:
+  - Jonathan Cameron <jic23@kernel.org>
+
+description:
+  This binding describes generic properties a consumer of the channels
+  provided by an IIO device may use.
+
+  As well, direct readings of channels on an IIO Device, an IIO device
+  can provide services to consumer devices. Thes are in the form of channel
+  readings and properties.  For example, an ADC might provide 3 channels to
+  an analog accelerometer so that an accelerometer driver can use them to
+  read the voltages that correspond to the accelerations on the 3 axis and
+  apply appropriate calibration to provide useful outputs.
+
+select: true
+
+properties:
+  io-channels:
+    $ref: /schemas/types.yaml#/definitions/phandle-array
+    description: >
+      List of phandle and IIO specifier pairs, one pair for each IIO input
+      to the device. Note: if the IIO provider specifies '0' for
+      #io-channel-cells, then only the phandle portion of the pair will appear.
+
+  io-channel-ranges:
+    type: boolean
+    description: >
+      Empty property indicating that child nodes can inherit named IIO channels
+      from this node. Useful for bus nodes to provide and IIO channel to their
+      children.
+
+dependencies:
+  io-channel-names: [io-channels]
+  io-channel-ranges: [io-channels]
+
+additionalProperties: true
