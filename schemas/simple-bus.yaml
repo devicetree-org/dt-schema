@@ -24,6 +24,12 @@ properties:
     enum: [ 1, 2 ]
   "#size-cells":
     enum: [ 1, 2 ]
+  nonposted-mmio:
+    $ref: /schemas/types.yaml#/definitions/flag
+    description:
+      If present, specifies that direct children of this bus should use
+      non-posted memory accesses (i.e. a non-posted mapping mode) for MMIO
+      ranges.
 
 patternProperties:
   # All other properties should be child nodes with unit-address and 'reg'
