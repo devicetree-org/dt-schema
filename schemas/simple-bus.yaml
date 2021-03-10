@@ -7,8 +7,7 @@ $id: http://devicetree.org/schemas/simple-bus.yaml#
 $schema: http://devicetree.org/meta-schemas/core.yaml#
 
 title: simple-bus nodes
-description: |
-  Common properties always required in /memory nodes
+description: Common simple-bus binding
 
 maintainers:
   - Rob Herring <robh@kernel.org>
