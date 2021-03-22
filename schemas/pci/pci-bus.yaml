@@ -145,10 +145,8 @@ patternProperties:
         maxItems: 6   # Up to 6 BARs
       vpcie12v-supply:
         description: 12v regulator phandle for the endpoint device
-        $ref: "/schemas/types.yaml#/definitions/phandle"
       vpcie3v3-supply:
         description: 3.3v regulator phandle for the endpoint device
-        $ref: "/schemas/types.yaml#/definitions/phandle"
     required:
       - reg
 
