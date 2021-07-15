@@ -113,7 +113,7 @@ properties:
 
   reset-gpios:
     description: GPIO controlled connection to PERST# signal
-    maxItems: 1
+    maxItems: 4
 
   supports-clkreq:
     type: boolean
