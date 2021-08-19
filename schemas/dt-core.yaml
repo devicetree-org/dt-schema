@@ -35,7 +35,7 @@ properties:
     $ref: "types.yaml#/definitions/uint32-matrix"
   status:
     $ref: "types.yaml#/definitions/string"
-    enum: [ okay, disabled ]
+    enum: [ okay, disabled, reserved ]
 patternProperties:
   "^#.*-cells$":
     $ref: "types.yaml#/definitions/uint32"
