@@ -17,6 +17,17 @@ properties:
   $nodename:
     const: "/"
   model: { "$ref" : "types.yaml#/definitions/string-array"}
+  chassis-type:
+    items:
+      - const: desktop
+      - const: laptop
+      - const: convertible
+      - const: server
+      - const: tablet
+      - const: handset
+      - const: watch
+      - const: embedded
+    maxItems: 1
   "#address-cells":
     enum: [1, 2]
   "#size-cells":
@@ -63,6 +74,7 @@ examples:
     / {
         compatible = "acme,boogieboard";
         model = "Acme Ltd. Boogieboard developer system";
+        chassis-type = "embedded";
         #address-cells = <1>;
         #size-cells = <1>;
         memory@0 {
