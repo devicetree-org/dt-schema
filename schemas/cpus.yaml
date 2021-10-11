@@ -73,6 +73,14 @@ patternProperties:
           Specifies the current frequency at which the timebase and the
           decrementer registers are updated (in Hertz).
 
+      status:
+        $ref: "types.yaml#/definitions/string"
+        enum: [ okay, disabled, fail ]
+        description:
+          A standard property describing the state of a CPU. A CPU may be
+          running ("okay"), in a quiescent state ("disabled") or be not
+          operational or not exist ("fail").
+
       enable-method:
         $ref: /schemas/types.yaml#/definitions/string-array
         description:
