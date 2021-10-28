@@ -83,19 +83,20 @@ Devicetree Meta-Schema files are normal YAML files using the jsonschema vocabula
 ## Usage
 There are several tools available in the *tools/* directory.
 
-tools/dt-doc-validate
+`tools/dt-doc-validate`
 This tool takes a schema file(s) or directory of schema files and validates
 them against the DT meta-schema.
 
-tools/dt-mk-schema
-This tool takes user provided schema file(s) plus the core schema files in this
+`tools/dt-mk-schema`
+This tool takes user-provided schema file(s) plus the core schema files in this
 repo, removes everything not needed for validation, applies fix-ups to the
 schemas, and outputs a single file with the processed schema. This step is
 done separately to speed up subsequent validation of YAML Devicetrees.
 
-tools/dt-validate
-This tool takes user provided YAML Devicetree(s) and either a schema directory
-or pre-processed schema file and validates the YAML Devicetree against the schema.
+`tools/dt-validate`
+This tool takes user-provided YAML Devicetree(s) and either a schema directory
+or pre-processed schema file and validates the YAML Devicetree against the
+schema.
 
 
 ## Installing
