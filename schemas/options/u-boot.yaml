@@ -1,0 +1,106 @@
+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+# Copyright 2021 Google LLC
+
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/options/u-boot.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: U-Boot configuration node
+
+maintainers:
+  - Simon Glass <sjg@chromium.org>
+
+description: |
+  The u-boot,config node provides basic configuration information to U-Boot,
+  for use during its execution. It can be used to control U-Boot's behaviour
+  in various ways.
+
+properties:
+  $nodename:
+    const: u-boot
+
+  compatible:
+    const: u-boot,config
+
+  bootcmd:
+    $ref: /schemas/types.yaml#/definitions/string
+    description: |
+      Allows overwriting of the boot command used by U-Boot on startup. If
+      present, U-Boot uses this command instead. Note that this feature can
+      work even if loading the environment is disabled, e.g. for security
+      reasons. See also bootsecure.
+
+  bootdelay-sec:
+    description: |
+      Allows selecting of the U-Boot bootdelay, to control whether U-Boot
+      waits on boot or for how long. This allows this option to be configured
+      by the build system or by a previous-stage binary. For example, if the
+      images is being packed for testing or a user holds down a button, it may
+      allow a delay, but disable it for production.
+
+      If this property is not present, a default value is used instead.
+
+      Note that this uses the 'sec' property unit, even though it allows a
+      negative value.
+
+      Values:
+
+      -1: no bootdelay and the user cannot interrupt boot
+      0: no bootdelay but use user can still interrupt boot by holding down a
+        key, if enabled
+      >= 1: delay for this many seconds
+
+
+  bootsecure:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    default: 0
+    maximum: 2
+    description: |
+      Controls the execution of the boot command in U-Boot, e.g. selecting
+      between using a special function to run commands, or the normal CLI. This
+      can be used in production images, to restrict the amount of parsing done
+      or the options available, to cut back on the available surface for
+      security attacks.
+
+      Values:
+
+      0: normal boot using CLI (default if not present)
+      1: use secure boot mechanism instead to parse and run commands
+        other values are reserved for future use
+      2: use simplified command line (e.g. avoid hush)
+      3... reserved
+
+  silent-console:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    default: 0
+    maximum: 2
+    description: |
+      This allows the console to be silenced by default on boot. This can allow
+      easy disabling of console output on a production build, for example. When
+      suppressed, the console is still active. This feature only suppresses the
+      console output itself, on all output devices.
+
+      Values:
+
+      0: console output appears as normal (default)
+      1: console output is suppressed but console recording still operates (if
+        enabled)
+      2: console output is suppressed and not recorded
+
+required:
+  - compatible
+
+additionalProperties: false
+
+examples:
+  - |
+    options {
+      u-boot {
+        compatible = "u-boot,config";
+        bootcmd = "vboot go auto";
+        bootdelay-sec = <(-1)>;
+        bootsecure = <1>;
+        silent-console = <1>;
+      };
+    };
