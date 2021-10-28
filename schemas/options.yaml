@@ -1,0 +1,79 @@
+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-clause
+# Copyright 2021 Google LLC
+#
+
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/options.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: /options Node
+
+maintainers:
+  - Simon Glass <sjg@chromium.org>
+
+description: |
+  The '/options' node does not represent a real device, but serves as a place
+  for passing data into and between firmware components, such as memory
+  mappings. Data in the '/options' node does not represent the hardware. It is
+  ignored by operating systems.
+
+  Properties in this node should be common to (and used by) at least two
+  firmware projects, such as U-Boot and TF-A. Project-specific subnodes can be
+  used for properties which are specific to a single project.
+
+  This is based on the precedent set by IEEE 1275-1994 IEEE Standard for Boot
+  (Initialization Configuration) Firmware: Core Requirements and Practices
+  at https://www.openfirmware.info/data/docs/of1275.pdf
+
+  Purpose of '/options' node
+  --------------------------
+
+  A common problem with firmware is that many builds are needed to deal with the
+  slight variations between different, related models of the same hardware. For
+  example, one model may have a TPM and another may not. Devicetree provides an
+  excellent solution to this problem, in that the devicetree to actually use on
+  a platform can be injected in the factory based on which model is being
+  manufactured at the time.
+
+  A related problem causing build proliferation is dealing with the differences
+  between development firmware, developer-friendly firmware (e.g. with all
+  security features present but with the ability to access the command line),
+  test firmware (which runs tests used in the factory), final production
+  firmware (before signing), signed firmware (where the signatures have been
+  inserted) and the like. Ideally all or most of these should use the same
+  firmware build, with just some options to determine the features available.
+  For example, being able to control whether the UART console or JTAG are
+  available, on any image, is a great debugging aid.
+
+  When the firmware consists of multiple parts (various U-Boot phases, TF-A,
+  OP-TEE), it is helpful that all operate the same way at runtime, regardless of
+  how they were built. This can be achieved by passing the runtime configuration
+  (e.g. 'enable UART console', 'here are your public keys') along the chain
+  through each firmware stage. It is frustrating to have to replicate a bug on
+  production firmware which does not happen on developer firmware, because they
+  are completely different builds.
+
+  The '/options' node provides useful functionality for this. It allows the
+  different controls to be 'factored out' of the firmware binaries, so they can
+  be controlled separately from the initial source-code build. The node can be
+  easily updated by a build or factory tool and can control various features in
+  the firmware binaries. It is similar in concept to a Kconfig option, except
+  that it can be changed after firmware binaries are built.
+
+  The '/options' node is similar in concept to /chosen (see chosen.yaml) except
+  that it is for passing information *into* and *between*) firmware components,
+  instead of from firmware to the operating system. Also, while operating
+  systems typically have a (sometimes extremely long) command line, firmware
+  binaries typically do not support this. The devicetree provides a more
+  structured approach in any case.
+
+properties:
+  $nodename:
+    const: options
+
+  "#address-cells": true
+  "#size-cells": true
+
+additionalProperties:
+  type: object
