@@ -127,7 +127,7 @@ On Debian/Ubuntu, the dependencies can be installed with apt and/or pip. The
 rfc3987 module is not packaged, so pip must be used:
 
 ```
-apt-get install python3 python-ruamel.yaml
+apt-get install python3 python3-ruamel.yaml
 pip3 install rfc3987
 ```
 
