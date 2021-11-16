@@ -1,0 +1,190 @@
+# SPDX-License-Identifier: (GPL2.0-only OR BSD-2-Clause)
+# Copyright 2018 Linaro Ltd.
+# Copyright 2021 Pali Rohár <pali@kernel.org>
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/pci/pcie-bus.yaml#
+$schema: http://devicetree.org/meta-schemas/base.yaml#
+
+title: PCIe controller schema
+
+description: |
+  Common properties for PCIe segment group which consist of PCIe host bridge
+  node, PCIe Root Port nodes, PCIe switch nodes and PCIe endpoint nodes.
+
+maintainers:
+  - Rob Herring <robh@kernel.org>
+  - Pali Rohár <pali@kernel.org>
+
+$defs:
+  pcie-downstream-port:
+    title: PCI Express Downstream port
+
+    description: |
+      This node represents PCI Express port in Downstream direction of some PCI
+      Bridge compatible function together with PCI secondary bus of that bridge.
+      For example it can be PCI Express Root port, or Downstream port of PCI
+      Express Switch, or PCI Express port of PCI/X to PCI Express (reverse)
+      bridge. This node contains also PCI Express link and slot properties for
+      downstream direction.
+
+    allOf:
+      - $ref: /schemas/pci/pci-bus.yaml#/$defs/pci-bridge
+
+    $nodename:
+      pattern: "@1?[0-9a-f](,0)?$"
+
+    max-link-speed:
+      $ref: /schemas/types.yaml#/definitions/uint32
+      enum: [ 1, 2, 3, 4 ]
+
+    num-lanes:
+      description: The number of PCIe lanes
+      $ref: /schemas/types.yaml#/definitions/uint32
+      enum: [ 1, 2, 4, 8, 16, 32 ]
+
+    reset-gpios:
+      description: GPIO controlled connection to PERST# signal
+      maxItems: 1
+
+    supports-clkreq:
+      type: boolean
+
+    aspm-no-l0s:
+      description: Disables ASPM L0s capability
+      type: boolean
+
+    patternProperties:
+      ".*":
+        if:
+          type: object
+          properties:
+            device_type:
+              const: pci
+        then:
+          oneOf:
+            - $ref: "#/$defs/pcie-endpoint-function"
+            - $ref: "#/$defs/pcie-switch"
+
+      "@1?[0-9a-f](,[0-7])?$":
+        oneOf:
+          - $ref: "#/$defs/pcie-endpoint-function"
+          - $ref: "#/$defs/pcie-switch"
+
+
+  pcie-upstream-port:
+    title: PCI Express Upstream port
+
+    description: |
+      This node represents PCI Express port in Upstream direction of some PCI
+      Bridge compatible function together with PCI secondary bus of that bridge.
+      For example it can be Upstream port of PCI Express Switch or PCI Express
+      port of PCI Express to PCI/X bridge.
+
+    allOf:
+      - $ref: /schemas/pci/pci-bus.yaml#/$defs/pci-bridge
+
+    $nodename:
+      pattern: "@1?[0-9a-f](,0)?$"
+
+
+  pcie-root-port:
+    title: PCI Express Root port
+
+    description: |
+      This node represents PCI Express Root port, special case of PCI Express
+      port in Downstream direction, which is part of PCI Express Root Complex.
+
+    allOf:
+      - $ref: "#/$defs/pcie-downstream-port"
+
+
+  pcie-switch:
+    title: PCI Express switch
+
+    description: |
+      This node represents PCI Express switch device, which top level part is
+      PCI Express port in Upstream direction and subnodes are PCI Express ports
+      in Downstream direction.
+
+    allOf:
+      - $ref: "#/$defs/pcie-upstream-port"
+
+    $nodename:
+      pattern: "^pcie-switch@0(,[0-7])?$"
+
+    patternProperties:
+      ".*":
+        if:
+          type: object
+          properties:
+            device_type:
+              const: pci
+        then:
+          allOf:
+            - $ref: "#/$defs/pcie-downstream-port"
+          properties:
+            $nodename:
+              pattern: "^pcie-port@1?[0-9a-f](,0)?$"
+
+      "@1?[0-9a-f](,[0-7])?$":
+        $ref: "#/$defs/pcie-downstream-port"
+
+
+  pcie-endpoint-function:
+    title: PCI Express endpoint function
+
+    description: |
+      This node represents non-bridge PCI Express endpoint function which has
+      upstream direction. This node is what represents single-function PCI
+      Express expansion card.
+
+    allOf:
+      - $ref: /schemas/pci/pci-bus.yaml#/$defs/pci-function
+      - not:
+          properties:
+            compatible:
+              contains:
+                const: "pciclass,0604"
+
+    $nodename:
+      pattern: "@0(,[0-7])?$"
+
+
+  pcie-controller:
+    title: PCI Express controller
+
+    description: |
+      This node represents PCI Express controller, also known as PCI Host bridge
+      which is root of the PCI bus segment group, called also Linux PCI domain.
+      It is PCI master bus and is part of the PCI Express Root Complex block.
+
+    allOf:
+      - $ref: /schemas/pci/pci-bus.yaml#
+
+    properties:
+      $nodename:
+        pattern: "^pcie@"
+
+    patternProperties:
+      ".*":
+        if:
+          type: object
+          properties:
+            device_type:
+              const: pci
+        then:
+          allOf:
+            - $ref: "#/$defs/pcie-root-port"
+          properties:
+            $nodename:
+              patttern: "^pcie-root-port@1?[0-9a-f](,0)?$"
+
+      "@1?[0-9a-f](,[0-7])?$":
+        $ref: "#/$defs/pcie-root-port"
+
+
+allOf:
+  - $ref: "#/$defs/pcie-controller"
+
+additionalProperties: true
