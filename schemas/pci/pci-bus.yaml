@@ -122,6 +122,12 @@ properties:
     description: GPIO controlled connection to PERST# signal
     maxItems: 1
 
+  slot-power-limit-milliwatt:
+    description:
+      If present, specifies slot power limit in milliwatts.
+      This property is invalid in host bridge nodes.
+    maxItems: 1
+
   supports-clkreq:
     type: boolean
 
