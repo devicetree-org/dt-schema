@@ -76,6 +76,12 @@ patternProperties:
   "-micro-ohms$":
     $ref: "types.yaml#/definitions/uint32-array"
     description: microohm
+  "-microwatt$":
+    $ref: "types.yaml#/definitions/uint32-array"
+    description: microwatt
+  "-milliwatt$":
+    $ref: "types.yaml#/definitions/uint32-array"
+    description: milliwatt
   "-microwatt-hours$":
     $ref: "types.yaml#/definitions/uint32-array"
     description: microwatt hour
