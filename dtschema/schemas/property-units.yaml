@@ -40,7 +40,7 @@ patternProperties:
     $ref: "types.yaml#/definitions/uint32-array"
     description: megahertz
   "-hz$":
-    $ref: "types.yaml#/definitions/uint32-array"
+    $ref: "types.yaml#/definitions/uint32-matrix"
     description: hertz (preferred)
   "-sec$":
     $ref: "types.yaml#/definitions/uint32-array"
