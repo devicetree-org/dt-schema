@@ -200,6 +200,12 @@ properties:
       carrying the IMA measurement logs. The address and the suze are expressed in
       #address-cells and #size-cells, respectively of the root node.
 
+  u-boot,bootconf:
+    $ref: types.yaml#/definitions/string
+    description:
+      This property can be used by U-Boot to pass the selected configuration unit
+      name of the booted image down to the operating system.
+
 patternProperties:
   "^framebuffer": true
 
