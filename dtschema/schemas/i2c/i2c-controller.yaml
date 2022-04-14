@@ -28,6 +28,12 @@ properties:
     minimum: 1000
     maximum: 3000000
 
+  no-detect:
+    type: boolean
+    description:
+      States that no other devices are present on this bus other than the ones
+      listed in the devicetree.
+
 patternProperties:
   '@[0-9a-f]+$':
     type: object
