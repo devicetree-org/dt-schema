@@ -35,6 +35,10 @@ patternProperties:
     $ref: "types.yaml#/definitions/uint32-array"
     description: percentage
 
+  "-bp$":
+    $ref: "types.yaml#/definitions/uint32-array"
+    description: basis points (1/100 of a percent)
+
   # Time/Frequency
   "-mhz$":
     $ref: "types.yaml#/definitions/uint32-array"
