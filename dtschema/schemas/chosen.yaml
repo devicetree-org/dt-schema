@@ -206,6 +206,13 @@ properties:
       This property can be used by U-Boot to pass the selected configuration unit
       name of the booted image down to the operating system.
 
+  u-boot,version:
+    $ref: types.yaml#/definitions/string
+    pattern: "^20[0-9]{2}\\.[0-9]{2}.*$"
+    description:
+      This property is used by U-Boot to pass its version down to the operating
+      system.
+
 patternProperties:
   "^framebuffer": true
 
