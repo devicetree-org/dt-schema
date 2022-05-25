@@ -231,7 +231,7 @@ def _fixup_int_matrix(subschema):
 
 
 int_array_re = re.compile('int(8|16|32|64)-array')
-unit_types_re = re.compile('-(bits|percent|mhz|hz|sec|ms|us|ns|ps|mm|microamp|microamp-hours|ohms|micro-ohms|microwatt-hours|microvolt|picofarads|celsius|millicelsius|kpascal)$')
+unit_types_re = re.compile('-(bits|percent|bp|mhz|hz|sec|ms|us|ns|ps|mm|microamp|microamp-hours|ohms|micro-ohms|microwatt-hours|microvolt|picofarads|celsius|millicelsius|kpascal)$')
 
 # Remove this once we remove array to matrix fixups
 known_array_props = {'assigned-clock-rates', 'linux,keycodes'}
