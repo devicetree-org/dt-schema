@@ -165,7 +165,7 @@ patternProperties:
                 - wakeup
                 - smbus_alert
             description:
-              Names which are recognized by I2C core,	other names are	left to
+              Names which are recognized by I2C core, other names are left to
               individual bindings.
 
       wakeup-source:
