@@ -25,6 +25,8 @@ properties:
     $ref: "types.yaml#/definitions/string"
   dma-coherent:
     $ref: "types.yaml#/definitions/flag"
+  dma-noncoherent:
+    $ref: "types.yaml#/definitions/flag"
   dma-ranges:
     oneOf:
       - $ref: "types.yaml#/definitions/flag"
