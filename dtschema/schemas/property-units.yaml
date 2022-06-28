@@ -71,6 +71,9 @@ patternProperties:
   "-microamp$":
     $ref: "types.yaml#/definitions/uint32-array"
     description: microampere
+  "-nanoamp$":
+    $ref: "types.yaml#/definitions/uint32-array"
+    description: nanoampere
   "-microamp-hours$":
     $ref: "types.yaml#/definitions/uint32-array"
     description: microampere hour
