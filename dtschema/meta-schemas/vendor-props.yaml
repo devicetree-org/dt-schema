@@ -76,7 +76,7 @@ additionalProperties:
       - description: A vendor property can have a $ref to a a $defs schema
         properties:   # A property with a type and additional constraints
           $ref:
-            pattern: "^#\/(definitions|$defs)\/"
+            pattern: "^#\/(definitions|\\$defs)\/"
         required: [ $ref ]
 
 ...
