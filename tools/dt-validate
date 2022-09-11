@@ -60,10 +60,12 @@ class schema_group():
                             if 'required property' in error.message:
                                 continue
                             elif error.context:
+                                found = False
                                 for e in error.context:
-                                    if not 'required property' in e.message:
+                                    if 'required property' in e.message:
+                                        found = True
                                         break
-                                else:
+                                if found:
                                     continue
 
                         if schema['$id'] == 'generated-compatibles':
