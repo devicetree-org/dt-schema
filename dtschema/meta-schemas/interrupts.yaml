@@ -21,7 +21,6 @@ properties:
     oneOf:
       - $ref: "boolean.yaml"
       - $ref: "nodes.yaml"
-  interrupt-parent: false # interrupt-parent is implicit
 
 dependentRequired:
   interrupt-map: ['#interrupt-cells']

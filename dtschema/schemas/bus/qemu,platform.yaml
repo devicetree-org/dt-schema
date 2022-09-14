@@ -39,6 +39,9 @@ properties:
       non-posted memory accesses (i.e. a non-posted mapping mode) for MMIO
       ranges.
 
+  interrupt-parent:
+    $ref: /schemas/types.yaml#/definitions/phandle
+
 patternProperties:
   # All other properties should be child nodes with unit-address and 'reg'
   "@(0|[1-9a-f][0-9a-f]*)$":
