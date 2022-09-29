@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: BSD-2-Clause
+// Copyright 2022 Google LLC
+
+// An attempt to provide a device tree to validate the phase properties
+
+// dtc -O dtb -o test.dtb test/bootphases.dts && tools/dt-validate test.dtb
+
+
+/dts-v1/;
+
+/ {
+	model = "none";
+	compatible = "foo";
+
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	some-device {
+		compatible = "vendor,soc1-ip";
+		bootph-pre-sram;
+	};
+};

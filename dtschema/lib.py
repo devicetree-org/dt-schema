@@ -493,6 +493,11 @@ def fixup_node_props(schema):
     schema['properties'].setdefault('status', True)
     schema['properties'].setdefault('secure-status', True)
     schema['properties'].setdefault('$nodename', True)
+    schema['properties'].setdefault('bootph-pre-sram', True)
+    schema['properties'].setdefault('bootph-verify', True)
+    schema['properties'].setdefault('bootph-pre-ram', True)
+    schema['properties'].setdefault('bootph-some-ram', True)
+    schema['properties'].setdefault('bootph-all', True)
 
     keys = list()
     if 'properties' in schema:
