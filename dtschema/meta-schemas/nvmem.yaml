@@ -10,7 +10,9 @@ properties:
     $ref: "cell.yaml#/array"
 
   nvmem-cells:
-    $ref: "cell.yaml#/array"
+    oneOf:
+      - $ref: "cell.yaml#/array"
+      - $ref: "/schemas/types.yaml#/definitions/phandle-array"
 
   '#nvmem-cell-cells': true
 
