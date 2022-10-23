@@ -12,6 +12,8 @@ properties:
   nvmem-cells:
     $ref: "cell.yaml#/array"
 
+  '#nvmem-cell-cells': true
+
 dependentRequired:
   nvmem-names: [nvmem]
   nvmem-cell-names: [nvmem-cells]
