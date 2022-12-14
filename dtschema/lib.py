@@ -217,6 +217,7 @@ def _is_matrix_schema(subschema):
 
 known_variable_matrix_props = {
     'fsl,pins',
+    'qcom,board-id',
 }
 
 
