@@ -75,7 +75,7 @@ single:
     default:
       type: integer
     oneOf:
-      $ref: #/single
+      $ref: '#/single'
 
   propertyNames:
     enum: [ description, deprecated, const, enum, minimum, maximum, multipleOf, default, $ref, oneOf ]
