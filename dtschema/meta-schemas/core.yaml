@@ -31,7 +31,6 @@ definitions:
       - $ref: power-domain.yaml#
       - $ref: pwm.yaml#
       - $ref: reset.yaml#
-      - $ref: mailbox.yaml#
       - $ref: vendor-props.yaml#
   core-properties:
     properties:
