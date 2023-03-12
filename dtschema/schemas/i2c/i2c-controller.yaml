@@ -44,6 +44,18 @@ properties:
       Number of nanoseconds the SCL signal takes to rise; t(r) in the I2C
       specification.
 
+  i2c-scl-clk-low-timeout-us:
+    description:
+      Number of microseconds the clock line needs to be pulled down in order
+      to force a waiting state.
+
+  i2c-scl-has-clk-low-timeout:
+    type: boolean
+    description:
+      Indicates whether the controller implements the feature of wait
+      induction through SCL low, with the timeout being implemented
+      internally by the controller.
+
   i2c-sda-falling-time-ns:
     description:
       Number of nanoseconds the SDA signal takes to fall; t(f) in the I2C
@@ -120,6 +132,12 @@ properties:
     description:
       States that no other devices are present on this bus other than the ones
       listed in the devicetree.
+
+allOf:
+  - not:
+      required:
+        - i2c-scl-clk-low-timeout-us
+        - i2c-scl-has-clk-low-timeout
 
 patternProperties:
   '@[0-9a-f]+$':
