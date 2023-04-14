@@ -97,7 +97,7 @@ class TestDTSchema(unittest.TestCase):
                 self.assertEqual(ids.count(schema['$id']), 0)
                 ids.append(schema['$id'])
 
-    def test_binding_schemas_valid_draft7(self):
+    def test_binding_schemas_valid_draft201909(self):
         '''Test that all schema files under ./dtschema/schemas/ validate against the Draft7 metaschema
         The DT Metaschema is supposed to force all schemas to be valid against
         Draft7. This test makes absolutely sure that they are.
@@ -105,7 +105,7 @@ class TestDTSchema(unittest.TestCase):
         for filename in glob.iglob(os.path.join(dtschema_dir, 'schemas/**/*.yaml'), recursive=True):
             with self.subTest(schema=filename):
                 schema = load(filename)
-                jsonschema.Draft7Validator.check_schema(schema)
+                jsonschema.Draft201909Validator.check_schema(schema)
 
 
 class TestDTValidate(unittest.TestCase):

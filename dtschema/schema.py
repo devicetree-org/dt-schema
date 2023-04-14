@@ -6,11 +6,16 @@ import sys
 import os
 import re
 import copy
+
+from functools import cache
+
 import jsonschema
 
-import dtschema
+from referencing import Registry
+from referencing.exceptions import NoSuchResource, Unresolvable
+from referencing.jsonschema import DRAFT201909
 
-from jsonschema.exceptions import RefResolutionError
+import dtschema
 
 schema_base_url = "http://devicetree.org/"
 schema_basedir = os.path.dirname(os.path.abspath(__file__))
@@ -55,6 +60,26 @@ def _schema_allows_no_undefined_props(schema):
     return not additional_props or isinstance(additional_props, dict) or \
            not uneval_props or isinstance(uneval_props, dict)
 
+
+@cache
+def create_meta_schema_registry():
+    import glob
+    import ruamel.yaml
+
+    yaml = ruamel.yaml.YAML(typ='safe')
+    yaml.allow_duplicate_keys = False
+
+    metaschemas = []
+    for filename in glob.iglob(schema_basedir + "/meta-schemas/*.yaml"):
+        with open(filename, 'r', encoding='utf-8') as f:
+            metaschema = yaml.load(f.read())
+            metaschemas += [(
+                metaschema['$id'],
+                DRAFT201909.create_resource(metaschema)
+            )]
+    return Registry().with_resources(metaschemas)
+
+
 class DTSchema(dict):
     DtValidator = jsonschema.validators.extend(
         jsonschema.Draft201909Validator,
@@ -78,24 +103,13 @@ class DTSchema(dict):
                 schema = yaml.load(f.read())
 
         self.filename = os.path.abspath(schema_file)
-        self._validator = None
 
-        id = schema['$id'].rstrip('#')
-        match = re.search('(.*/schemas/)(.+)$', id)
-        self.base_path = os.path.abspath(schema_file)[:-len(match[2])]
+        self.DtValidator.META_SCHEMA['properties']['select'] = {'$recursiveRef': '#'}
+
 
         super().__init__(schema)
 
-    def validator(self):
-        if not self._validator:
-            resolver = jsonschema.RefResolver.from_schema(self,
-                                handlers={'http': self.http_handler})
-            meta_schema = resolver.resolve_from_url(self['$schema'])
-            self._validator = self.DtValidator(meta_schema, resolver=resolver)
-
-        return self._validator
-
-    def http_handler(self, uri):
+    def retrieve(self, uri):
         '''Custom handler for http://devicetree.org references'''
         uri = uri.rstrip('#')
         missing_files = ''
@@ -108,30 +122,33 @@ class DTSchema(dict):
                 import ruamel.yaml
                 yaml = ruamel.yaml.YAML(typ='safe')
                 yaml.allow_duplicate_keys = False
-                return yaml.load(f.read())
 
-        raise RefResolutionError(f'Error in referenced schema matching $id: {uri}\n\tTried these paths (check schema $id if path is wrong):\n{missing_files}')
+                return DRAFT201909.create_resource(yaml.load(f.read()))
 
-    def annotate_error(self, error, schema, path):
+        raise NoSuchResource(ref=uri)
+
+    def annotate_error(self, error, uri, path):
         error.note = None
-        error.schema_file = None
 
         for e in error.context:
-            self.annotate_error(e, schema, path + e.schema_path)
+            self.annotate_error(e, uri, path + e.schema_path)
 
-        scope = self.validator().ID_OF(schema)
-        self.validator().resolver.push_scope(scope)
-        ref_depth = 1
+        registry = create_meta_schema_registry()
+        schema = registry[uri].contents
+        error.schema_file = uri
 
         for p in path:
             while p not in schema and '$ref' in schema and isinstance(schema['$ref'], str):
-                ref = self.validator().resolver.resolve(schema['$ref'])
-                schema = ref[1]
-                self.validator().resolver.push_scope(ref[0])
-                ref_depth += 1
-
-            if '$id' in schema and isinstance(schema['$id'], str):
-                error.schema_file = schema['$id']
+                ref = schema['$ref']
+                if ref.startswith('#'):
+                    schema = registry.resolver(uri).lookup(ref).contents
+                else:
+                    for rsrc in registry:
+                        if ref.split('#')[0] in rsrc:
+                            uri = rsrc
+                            break
+                    schema = registry.resolver(uri).lookup(ref).contents
+                    error.schema_file = uri
 
             schema = schema[p]
 
@@ -139,40 +156,38 @@ class DTSchema(dict):
                 if 'description' in schema and isinstance(schema['description'], str):
                     error.note = schema['description']
 
-        while ref_depth > 0:
-            self.validator().resolver.pop_scope()
-            ref_depth -= 1
-
         if isinstance(error.schema, dict) and 'description' in error.schema:
             error.note = error.schema['description']
 
-    def iter_errors(self):
-        meta_schema = self.validator().resolver.resolve_from_url(self['$schema'])
+    def iter_errors(self, strict=True):
+        if strict:
+            registry = create_meta_schema_registry()
 
-        for error in self.validator().iter_errors(self):
+            meta_schema_id = self['$schema'].rstrip('#')
+            self.validator = self.DtValidator(registry.contents(meta_schema_id), registry=registry)
+
+            for error in self.validator.iter_errors(self):
+                scherr = jsonschema.exceptions.SchemaError.create_from(error)
+                self.annotate_error(scherr, meta_schema_id, scherr.schema_path)
+                scherr.linecol = get_line_col(self, scherr.path)
+                yield scherr
+
+        for error in self.DtValidator(self.DtValidator.META_SCHEMA).iter_errors(self):
             scherr = jsonschema.exceptions.SchemaError.create_from(error)
-            self.annotate_error(scherr, meta_schema, scherr.schema_path)
             scherr.linecol = get_line_col(self, scherr.path)
             yield scherr
 
     def is_valid(self, strict=False):
         ''' Check if schema passes validation against json-schema.org schema '''
-        if strict:
-            for error in self.iter_errors():
-                raise error
-        else:
-            # Using the draft7 metaschema because 2019-09 with $recursiveRef seems broken
-            # Probably fixed with referencing library
-            for error in self.DtValidator(jsonschema.Draft7Validator.META_SCHEMA).iter_errors(self):
-                scherr = jsonschema.exceptions.SchemaError.create_from(error)
-                raise scherr
+        for error in self.iter_errors(strict):
+            raise error
 
     def fixup(self):
         processed_schema = copy.deepcopy(dict(self))
         dtschema.fixups.fixup_schema(processed_schema)
         return processed_schema
 
-    def _check_schema_refs(self, schema, parent=None, is_common=False, has_constraint=False):
+    def _check_schema_refs(self, resolver, schema, parent=None, is_common=False, has_constraint=False):
         if not parent:
             is_common = not _schema_allows_no_undefined_props(schema)
         if isinstance(schema, dict):
@@ -185,8 +200,7 @@ class DTSchema(dict):
 
             ref_has_constraint = True
             if '$ref' in schema:
-                ref = schema['$ref']
-                url, ref_sch = self.validator().resolver.resolve(ref)
+                ref_sch = resolver.lookup(schema['$ref']).contents
                 ref_has_constraint = _schema_allows_no_undefined_props(ref_sch)
 
             if not (is_common or ref_has_constraint or has_constraint or
@@ -195,17 +209,18 @@ class DTSchema(dict):
                       file=sys.stderr)
 
             for k, v in schema.items():
-                self._check_schema_refs(v, parent=k, is_common=is_common,
+                self._check_schema_refs(resolver, v, parent=k, is_common=is_common,
                                         has_constraint=has_constraint)
         elif isinstance(schema, (list, tuple)):
             for i in range(len(schema)):
-                self._check_schema_refs(schema[i], parent=parent, is_common=is_common,
+                self._check_schema_refs(resolver, schema[i], parent=parent, is_common=is_common,
                                         has_constraint=has_constraint)
 
     def check_schema_refs(self):
         id = self['$id'].rstrip('#')
         base1 = re.search('schemas/(.+)$', id)[1]
-        base2 = self.filename.replace(self.filename[:-len(base1)], '')
+        base_path = self.filename[:-len(base1)]
+        base2 = self.filename.replace(base_path, '')
         if not base1 == base2:
             print(f"{self.filename}: $id: Cannot determine base path from $id, relative path/filename doesn't match actual path or filename\n",
                   f"\t $id: {id}\n",
@@ -213,16 +228,16 @@ class DTSchema(dict):
                   file=sys.stderr)
             return
 
-        scope = self.validator().ID_OF(self)
-        if scope:
-            self.validator().resolver.push_scope(scope)
-
         self.paths = [
-            (schema_base_url + 'schemas/', self.base_path),
+            (schema_base_url + 'schemas/', base_path),
             (schema_base_url + 'schemas/', schema_basedir + '/schemas/'),
         ]
 
+        rsrc = DRAFT201909.create_resource(self)
+        registry = Registry(retrieve=self.retrieve).with_resource(uri=id, resource=rsrc)
+        resolver = registry.resolver_with_root(rsrc)
+
         try:
-            self._check_schema_refs(self)
-        except jsonschema.RefResolutionError as exc:
-            print(f"{self.filename}:\n\t{exc}", file=sys.stderr)
+            self._check_schema_refs(resolver, self)
+        except Unresolvable as exc:
+            print(f"{self.filename}: Unresolvable reference: {exc}", file=sys.stderr)

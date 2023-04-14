@@ -10,7 +10,8 @@ import glob
 import json
 import jsonschema
 
-from jsonschema.exceptions import RefResolutionError
+from referencing import Registry
+from referencing.jsonschema import DRAFT201909
 
 import dtschema
 from dtschema.lib import _is_string_schema
@@ -297,11 +298,12 @@ def _add_schema(schemas, filename):
     sch = process_schema(os.path.abspath(filename))
     if not sch or '$id' not in sch:
         return False
-    if sch['$id'] in schemas:
-        print(f"{sch['$filename']}: warning: ignoring duplicate '$id' value '{sch['$id']}'", file=sys.stderr)
+    _id = sch['$id'].rstrip('#')
+    if _id in schemas:
+        print(f"{sch['$filename']}: warning: ignoring duplicate '$id' value '{_id}'", file=sys.stderr)
         return False
     else:
-        schemas[sch['$id']] = sch
+        schemas[_id] = sch
 
     return True
 
@@ -342,6 +344,11 @@ def typeSize(validator, typeSize, instance, schema):
         yield jsonschema.ValidationError("size is %r, expected %r" % (size, typeSize))
 
 
+def _get_schema_by_path(schema, path):
+    if len(path)==1: return schema[path[0]]
+    return _get_schema_by_path(schema[path[0]],path[1:])
+
+
 class DTValidator:
     '''Custom Validator for Devicetree Schemas
 
@@ -352,9 +359,9 @@ class DTValidator:
     '''
     DtValidator = jsonschema.validators.extend(jsonschema.Draft201909Validator, {'typeSize': typeSize})
 
-    def __init__(self, schema_files, filter=None):
+    def __init__(self, schema_files, id_filter=""):
         self.schemas = {}
-        self.resolver = jsonschema.RefResolver('', None, handlers={'http': self.http_handler})
+        self.registry = Registry(retrieve=self.retrieve)
         schema_cache = None
 
         if len(schema_files) == 1 and os.path.isfile(schema_files[0]):
@@ -399,9 +406,10 @@ class DTValidator:
         self.always_schemas = []
         self.compat_map = {}
         for sch in self.schemas.values():
+            _id = sch['$id'].rstrip('#')
             if 'select' in sch:
                 if sch['select'] is not False:
-                    self.always_schemas += [sch['$id']]
+                    self.always_schemas += [_id]
             elif 'properties' in sch and 'compatible' in sch['properties']:
                 compatibles = dtschema.extract_node_compatibles(sch['properties']['compatible'])
                 if len(compatibles) > 1:
@@ -410,22 +418,12 @@ class DTValidator:
                     if not schema_cache and c in self.compat_map:
                         print(f'Warning: Duplicate compatible "{c}" found in schemas matching "$id":\n'
                               f'\t{self.compat_map[c]}\n\t{sch["$id"]}', file=sys.stderr)
-                    self.compat_map[c] = sch['$id']
+                    self.compat_map[c] = _id
 
         self.schemas['version'] = dtschema.__version__
 
-    def http_handler(self, uri):
-        '''Custom handler for http://devicetree.org references'''
-        try:
-            uri += '#'
-            if uri in self.schemas:
-                return self.schemas[uri]
-            else:
-                # If we have a schema_cache, then the schema should have been there unless the schema had errors
-                if len(self.schemas):
-                    return {'not': {'description': f"Can't find referenced schema: {uri}"}}
-        except:
-            raise RefResolutionError('Error in referenced schema matching $id: ' + uri)
+    def retrieve(self, uri):
+        return DRAFT201909.create_resource(self.schemas[uri])
 
     def annotate_error(self, id, error):
         error.schema_file = id
@@ -447,10 +445,8 @@ class DTValidator:
                     schema_id = self.compat_map[inst_compat]
                     if self._filter_match(schema_id, filter):
                         schema = self.schemas[schema_id]
-                        for error in self.DtValidator(schema,
-                                                    resolver=self.resolver,
-                                                    ).iter_errors(instance):
-                            self.annotate_error(schema['$id'], error)
+                        for error in self.DtValidator(schema, registry=self.registry).iter_errors(instance):
+                            self.annotate_error(schema_id, error)
                             yield error
                     break
 
@@ -462,9 +458,7 @@ class DTValidator:
                 continue
             schema = {'if': self.schemas[schema_id]['select'],
                       'then': self.schemas[schema_id]}
-            for error in self.DtValidator(schema,
-                                          resolver=self.resolver,
-                                          ).iter_errors(instance):
+            for error in self.DtValidator(schema, registry=self.registry).iter_errors(instance):
                 self.annotate_error(schema_id, error)
                 yield error
 
@@ -486,7 +480,7 @@ class DTValidator:
         for p, val in self.props.items():
             if val[0]['type'] is None:
                 for id in val[0]['$id']:
-                    print(f"{self.schemas[id]['$filename']}: {p}: missing type definition", file=sys.stderr)
+                    print(f"{self.schemas[id.rstrip('#')]['$filename']}: {p}: missing type definition", file=sys.stderr)
 
     def check_duplicate_property_types(self):
         """

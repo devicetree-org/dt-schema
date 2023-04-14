@@ -8,7 +8,6 @@ $schema: https://json-schema.org/draft/2019-09/schema
 description: Metaschema for devicetree binding documentation
 
 allOf:
-  - $ref: http://json-schema.org/draft-07/schema#
   - $ref: http://devicetree.org/meta-schemas/keywords.yaml#
 
 properties:
@@ -42,17 +41,6 @@ properties:
       pattern: '@'
       type: string
       format: email
-
-  select:
-    description: '"select" must contain a valid json-schema'
-    allOf:
-      - $ref: http://json-schema.org/draft-07/schema#
-      - oneOf:
-          - type: object
-            properties:
-              properties: true
-              required: true
-          - type: boolean
 
 propertyNames:
   enum: [ $id, $schema, title, description, examples, required, allOf, anyOf, oneOf,
