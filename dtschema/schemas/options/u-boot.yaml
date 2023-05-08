@@ -71,6 +71,28 @@ properties:
       2: use simplified command line (e.g. avoid hush)
       3... reserved
 
+  bootscr-address:
+    $ref: /schemas/types.yaml#/definitions/uint64
+    default: 0x0
+    description:
+      Holds the full address of the boot script file. It helps in making
+      automated flow easier by fetching the 64bit address directly from DT.
+      Value should be automatically copied to the U-Boot 'scriptaddr' variable.
+      When it is defined, bootscr-ram-offset property should be ignored.
+      Actually only one of them should be present in the DT.
+
+  bootscr-ram-offset:
+    $ref: /schemas/types.yaml#/definitions/uint64
+    default: 0x0
+    description:
+      Holds the boot script file offset from the start of the ram base address.
+      Platforms with run-time RAM-detection algorithms should use this property
+      because it is not clear exactly where the script address should be placed.
+      Using it will provide the option to specify boot script offset from
+      detected RAM start. The U-Boot 'scriptaddr' variable should be composed as
+      detected RAM start plus value of bootscr-ram-offset property.
+      It should be used only when bootscr-address is not defined.
+
   silent-console:
     $ref: /schemas/types.yaml#/definitions/uint32
     default: 0
@@ -91,6 +113,13 @@ properties:
 required:
   - compatible
 
+if:
+  required:
+    - bootscr-address
+then:
+  properties:
+    bootscr-ram-offset: false
+
 additionalProperties: false
 
 examples:
@@ -101,6 +130,7 @@ examples:
         bootcmd = "vboot go auto";
         bootdelay-sec = <(-1)>;
         bootsecure = <1>;
+        bootscr-address = /bits/ 64 <0x1000>;
         silent-console = <1>;
       };
     };
