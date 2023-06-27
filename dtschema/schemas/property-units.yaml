@@ -38,11 +38,11 @@ patternProperties:
     description: kilobytes per second
 
   "-percent$":
-    $ref: types.yaml#/definitions/uint32-array
+    $ref: types.yaml#/definitions/int32-array
     description: percentage
 
   "-bp$":
-    $ref: types.yaml#/definitions/uint32-array
+    $ref: types.yaml#/definitions/int32-array
     description: basis points (1/100 of a percent)
 
   # Time/Frequency
