@@ -340,6 +340,10 @@ def fixup_sub_schema(schema, path=[]):
         return
 
     schema.pop('description', None)
+    # Remove properties if it's not an object
+    if not isinstance(schema.get('properties'), dict):
+        schema.pop('properties', None)
+
     fixup_interrupts(schema)
     fixup_node_props(schema)
 
