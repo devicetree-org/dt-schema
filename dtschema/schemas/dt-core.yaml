@@ -74,7 +74,7 @@ patternProperties:
       - $ref: types.yaml#/definitions/phandle
 
   # property and node namespace overlaps. Catch both here
-  "^[a-zA-Z0-9][a-zA-Z0-9,+\\-._]{0,63}$":
+  "^[a-zA-Z0-9][a-zA-Z0-9#,+\\-._]{0,63}$":
     type: [object, array, boolean, 'null']
 
   # Anything with a '@' is definitely a node
