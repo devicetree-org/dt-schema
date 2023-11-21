@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright 2023 Collabora Ltd.
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/thermal/thermal.yaml#
+$schema: http://devicetree.org/meta-schemas/base.yaml#
+
+title: Thermal Consumer Common Properties
+
+maintainers:
+  - Rob Herring <robh@kernel.org>
+
+# always select the core schema
+select: true
+
+properties:
+  thermal-zones:
+    anyOf:
+      - type: object # for nodes named 'thermal-zones'
+      - $ref: /schemas/types.yaml#/definitions/phandle-array
+    description: List of thermal zone phandles, one for each
+      thermal zone input to the device.
+
+  thermal-zone-names:
+    $ref: /schemas/types.yaml#/definitions/string-array
+    description: List of thermal zone name strings sorted in the
+      same order as the thermal-zones property. Consumer drivers
+      will use thermal-zone-names to match thermal zone input
+      names with thermal zone specifiers.
+
+dependentRequired:
+  thermal-zone-names: [ thermal-zones ]
+
+additionalProperties: true
