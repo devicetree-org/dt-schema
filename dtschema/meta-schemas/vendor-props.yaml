@@ -17,7 +17,7 @@ patternProperties:
   '^rcar_sound,': true
   '-(bits|bps|kBps|percent|bp|mhz|hz|sec|ms|us|ns|ps|mm)$': true
   '-(nanoamp|microamp|microamp-hours|ohms|micro-ohms|microwatt-hours)$': true
-  '-(microvolt|(femto|pico)farads|celsius|millicelsius|kelvin|kpascal)$': true
+  '-(microvolt|(femto|pico)farads|celsius|millicelsius|kelvin|k?pascal)$': true
 
   ",.*-names$":
     type: object

@@ -124,6 +124,9 @@ patternProperties:
     description: SI unit of thermodynamic temperature
 
   # Pressure
+  "-pascal$":
+    $ref: types.yaml#/definitions/int32-array
+    description: pascal
   "-kpascal$":
     $ref: types.yaml#/definitions/int32-array
     description: kilopascal

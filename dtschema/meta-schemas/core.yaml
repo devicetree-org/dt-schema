@@ -58,7 +58,7 @@ definitions:
         propertyNames:
           enum: [ description, deprecated ]
 
-      '-(bits|bps|kBps|percent|bp|mhz|hz|sec|ms|us|ns|ps|mm|nanoamp|microamp(-hours)?|(micro-)?ohms|microwatt-hours|microvolt|(femto|pico)farads|(milli)?celsius|kelvin|kpascal)$':
+      '-(bits|bps|kBps|percent|bp|mhz|hz|sec|ms|us|ns|ps|mm|nanoamp|microamp(-hours)?|(micro-)?ohms|microwatt-hours|microvolt|(femto|pico)farads|(milli)?celsius|kelvin|k?pascal)$':
         allOf:
           - $ref: cell.yaml#/array
           - description: Standard unit suffix properties don't need a type $ref
