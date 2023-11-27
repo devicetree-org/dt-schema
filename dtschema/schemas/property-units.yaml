@@ -125,7 +125,7 @@ patternProperties:
 
   # Pressure
   "-kpascal$":
-    $ref: types.yaml#/definitions/uint32-array
+    $ref: types.yaml#/definitions/int32-array
     description: kilopascal
 
 additionalProperties: true
