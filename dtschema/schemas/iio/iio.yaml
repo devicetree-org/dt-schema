@@ -30,6 +30,12 @@ properties:
       with a single IIO output and 1 for nodes with multiple IIO outputs.
       A few unusual devices have a 2 level mapping.
 
+  "#io-backend-cells":
+    enum: [0, 1]
+    description:
+      Number of cells in an IIO backend; Typically 0 for nodes
+      with a single backend and 1 for nodes with multiple backends.
+
   label:
     description:
       Unique name to identify which IIO channel or device this is.

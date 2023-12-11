@@ -14,12 +14,13 @@ description:
   provided by an IIO device may use.
 
   As well, direct readings of channels on an IIO Device, an IIO device
-  can provide services to consumer devices. Thes are in the form of channel
+  can provide services to consumer devices. They are in the form of channel
   readings and properties.  For example, an ADC might provide 3 channels to
   an analog accelerometer so that an accelerometer driver can use them to
   read the voltages that correspond to the accelerations on the 3 axis and
   apply appropriate calibration to provide useful outputs.
 
+  It also describes properties of a consumer of an IIO backend device.
 select: true
 
 properties:
@@ -30,7 +31,19 @@ properties:
       to the device. Note: if the IIO provider specifies '0' for
       #io-channel-cells, then only the phandle portion of the pair will appear.
 
+  io-backends:
+    $ref: /schemas/types.yaml#/definitions/phandle-array
+    description:
+      List of phandles for IIO backends. IIO backends are devices connected to
+      another IIO devices (consumers of the backends) providing services so
+      that the consumer IIO device can be fully functional. One typical example
+      of such an Hardware arrangement would be an high speed ADC that is
+      connected to an FPGA IP core (through a serial data interface as LVDS)
+      capable of handling the high sample rates. Examples of the provided
+      services would be channel enablement/disablement.
+
 dependencies:
   io-channel-names: [io-channels]
+  io-backend-names: [io-backends]
 
 additionalProperties: true
