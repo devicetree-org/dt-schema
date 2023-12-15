@@ -49,6 +49,22 @@ patternProperties:
           can be corrected by the Error-Correction Code (ECC) memory subsystem
           (typically 0, 1 or 2).
 
+      ddr_device_type:
+        $ref: types.yaml#/definitions/uint32
+        deprecated: true
+        description:
+          This is the ugly non-standard property set by some bootloaders to
+          describe the attached memory type. Unfortunately it is not possible
+          to update those bootloaders to use the defined schema for LPDDR
+          device nodes. This property is described here solely for the
+          documentation purposes, it MUST NOT be used in any of the DT files.
+          Use of this property outside of the described usecase is strictly
+          forbidden.
+        enum:
+          - 5 # LPDDR3
+          - 7 # LPDDR4x
+          - 8 # LPDDR5
+
     required:
       - device_type
       - reg
