@@ -272,7 +272,6 @@ phandle_args = {
     'msi-ranges': '#interrupt-cells',
     'gpio-ranges': 3,
 
-    'nvmem-cells': None,
     'memory-region': None,
 }
 
