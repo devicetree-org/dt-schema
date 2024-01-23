@@ -187,7 +187,7 @@ def get_prop_types(schemas):
     props = extract_types(schemas)
 
     # hack to remove aliases and generic patterns
-    del props['^[a-z][a-z0-9\-]*$']
+    del props[r'^[a-z][a-z0-9\-]*$']
 
     # Remove all node types
     for val in props.values():
@@ -221,11 +221,11 @@ def make_compatible_schema(schemas):
     # Allow 'foo' values for examples
     compat_sch += [{'pattern': '^foo'}]
 
-    prog = re.compile('.*[\^\[{\(\$].*')
+    prog = re.compile(r'.*[\^\[{\(\$].*')
     for c in compatible_list:
         if prog.match(c):
             # Exclude the generic pattern
-            if c != '^[a-zA-Z0-9][a-zA-Z0-9,+\-._/]+$' and \
+            if c != r'^[a-zA-Z0-9][a-zA-Z0-9,+\-._/]+$' and \
                not re.search(r'\.[+*]', c) and \
                c.startswith('^') and c.endswith('$'):
                 compat_sch += [{'pattern': c}]

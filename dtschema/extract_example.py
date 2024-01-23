@@ -75,11 +75,11 @@ def main():
     if 'examples' in binding.keys():
         for idx, ex in enumerate(binding['examples']):
             # Check if example contains a root node "/{"
-            root_node = re.search('/\s*{', ex)
+            root_node = re.search(r'/\s*{', ex)
 
             if not root_node:
                 try:
-                    int_val = re.search('\sinterrupts\s*=\s*<([0-9a-zA-Z |()_]+)>', ex).group(1)
+                    int_val = re.search(r'\sinterrupts\s*=\s*<([0-9a-zA-Z |()_]+)>', ex).group(1)
                     int_val = re.sub(r'\(.+|\)', r'0', int_val)
                     int_cells = len(int_val.strip().split())
                 except:
