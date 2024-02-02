@@ -28,4 +28,10 @@ properties:
     contains:
       const: pciclass,0604
 
+  supports-d3:
+    description:
+      If present, this property specifies that the bridge supports transitioning
+      to D3 states.
+    type: boolean
+
 unevaluatedProperties: false
