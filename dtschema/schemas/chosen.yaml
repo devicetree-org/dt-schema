@@ -75,7 +75,9 @@ properties:
       a different secondary CPU release mechanism).
 
   linux,elfcorehdr:
-    $ref: types.yaml#/definitions/uint64-array
+    oneOf:
+      - $ref: types.yaml#/definitions/uint32-array
+      - $ref: types.yaml#/definitions/uint64-array
     maxItems: 2
     description: |
       This property holds the memory range, the address and the size, of the
@@ -93,7 +95,9 @@ properties:
       respectively, of the root node.
 
   linux,usable-memory-range:
-    $ref: types.yaml#/definitions/uint64-array
+    oneOf:
+      - $ref: types.yaml#/definitions/uint32-array
+      - $ref: types.yaml#/definitions/uint64-array
     maxItems: 2
     description: |
       This property holds a base address and size, describing a limited region
@@ -187,7 +191,9 @@ properties:
       should only use the "stdout-path" property.
 
   linux,ima-kexec-buffer:
-    $ref: types.yaml#definitions/uint64-array
+    oneOf:
+      - $ref: types.yaml#/definitions/uint32-array
+      - $ref: types.yaml#/definitions/uint64-array
     maxItems: 2
     description: |
       This property(currently used by powerpc, arm64) holds the memory range,
@@ -205,7 +211,9 @@ properties:
       #address-cells and #size-cells, respectively of the root node.
 
   linux,tpm-kexec-buffer:
-    $ref: types.yaml#definitions/uint64-array
+    oneOf:
+      - $ref: types.yaml#/definitions/uint32-array
+      - $ref: types.yaml#/definitions/uint64-array
     maxItems: 2
     description: |
       This property (currently used by powerpc64) holds the memory range,
