@@ -49,6 +49,11 @@ properties:
       Number of microseconds the clock line needs to be pulled down in order
       to force a waiting state.
 
+  i2c-transfer-timeout-us:
+    description:
+      Number of microseconds to wait before considering an I2C transfer has
+      failed.
+
   i2c-scl-has-clk-low-timeout:
     type: boolean
     description:
