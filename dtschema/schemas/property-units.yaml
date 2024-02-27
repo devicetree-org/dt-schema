@@ -37,6 +37,14 @@ patternProperties:
     $ref: types.yaml#/definitions/uint32
     description: bits per second
 
+  "-kbps$":
+    $ref: types.yaml#/definitions/uint32
+    description: kilobits per second
+
+  "-mbps$":
+    $ref: types.yaml#/definitions/uint32
+    description: megabits per second
+
   "-kBps$":
     $ref: types.yaml#/definitions/uint32-array
     description: kilobytes per second
