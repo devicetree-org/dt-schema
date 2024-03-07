@@ -202,24 +202,6 @@ properties:
       carrying the IMA measurement logs. The address and the size are expressed in
       #address-cells and #size-cells, respectively of the root node.
 
-  linux,tpm-kexec-buffer:
-    $ref: types.yaml#/definitions/address
-    maxItems: 1
-    description: |
-      This property (currently used by powerpc64) holds the memory range,
-      "the address and the size", of the TPM's measurement log that is being
-      carried over to the new kernel.
-
-      / {
-          chosen {
-              linux,tpm-kexec-buffer = <0x9 0x82000000 0x0 0x00008000>;
-          };
-      };
-
-      This property does not represent real hardware, but the memory allocated for
-      carrying the TPM measurement log. The address and the size are expressed in
-      #address-cells and #size-cells, respectively of the root node.
-
   linux,uefi-system-table:
     $ref: types.yaml#/definitions/uint64
     description:
