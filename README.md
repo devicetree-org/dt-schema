@@ -2,7 +2,7 @@
 
 The dtschema module contains tools and schema data for Devicetree
 schema validation using the
-[json-schema](http://json-schema.org/documentation.html) vocabulary.
+[json-schema](https://json-schema.org) vocabulary.
 The tools validate Devicetree files using DT binding schema files. The
 tools also validate the DT binding schema files. Schema files are
 written in a JSON compatible subset of YAML to be both human and machine
