@@ -34,4 +34,10 @@ properties:
       to D3 states.
     type: boolean
 
+  interrupts:
+    description: wakeup interrupt
+
+  interrupt-names:
+    const: wake
+
 unevaluatedProperties: false
