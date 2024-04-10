@@ -34,4 +34,4 @@ properties:
       to D3 states.
     type: boolean
 
-unevaluatedProperties: false
+additionalProperties: true
