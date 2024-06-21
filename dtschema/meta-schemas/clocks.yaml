@@ -21,6 +21,8 @@ properties:
     $ref: cell.yaml#/array
   assigned-clock-rates:
     $ref: cell.yaml#/array
+  assigned-clock-rates-u64:
+    $ref: cell.yaml#/array
 
   clock-frequency:
     $ref: cell.yaml#/single
@@ -35,3 +37,4 @@ dependentRequired:
   assigned-clocks: [clocks]
   assigned-clock-parents: [assigned-clocks]
   assigned-clock-rates: [assigned-clocks]
+  assigned-clock-rates-u64: [assigned-clocks]

@@ -129,6 +129,8 @@ properties:
     $ref: /schemas/types.yaml#/definitions/phandle-array
   assigned-clock-rates:
     $ref: /schemas/types.yaml#/definitions/uint32-array
+  assigned-clock-rates-u64:
+    $ref: /schemas/types.yaml#/definitions/uint64-array
 
   protected-clocks:
     $ref: /schemas/types.yaml#/definitions/uint32-array
@@ -147,6 +149,7 @@ dependentRequired:
   clock-ranges: [clocks]
   assigned-clock-parents: [assigned-clocks]
   assigned-clock-rates: [assigned-clocks]
+  assigned-clock-rates-u64: [assigned-clocks]
   protected-clocks: ["#clock-cells"]
 
 dependentSchemas:

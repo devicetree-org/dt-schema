@@ -413,6 +413,7 @@ def fixup_node_props(schema):
 
     if "clocks" in keys and "assigned-clocks" not in keys:
         schema['properties']['assigned-clocks'] = True
+        schema['properties']['assigned-clock-rates-u64'] = True
         schema['properties']['assigned-clock-rates'] = True
         schema['properties']['assigned-clock-parents'] = True
 
