@@ -59,7 +59,7 @@ def _is_matrix_schema(subschema):
 
 
 int_array_re = re.compile('int(8|16|32|64)-array')
-unit_types_re = re.compile('-(bps|kBps|bits|percent|bp|m?hz|sec|ms|us|ns|ps|mm|nanoamp|(micro-)?ohms|micro(amp|watt)(-hours)?|milliwatt|microvolt|picofarads|(milli)?celsius|kelvin|k?pascal)$')
+unit_types_re = re.compile('-(bps|kbps|mbps|kBps|bits|percent|bp|m?hz|sec|ms|us|ns|ps|mm|nanoamp|(micro-)?ohms|micro(amp|watt)(-hours)?|milliwatt|microvolt|picofarads|(milli)?celsius|kelvin|k?pascal)$')
 
 # Remove this once we remove array to matrix fixups
 known_array_props = {
