@@ -56,7 +56,7 @@ properties:
     oneOf:
       - type: object
       - $ref: types.yaml#/definitions/string
-        enum: [ okay, disabled, reserved, fail ]
+        enum: [ okay, disabled, reserved, fail, fail-needs-probe ]
   phandle:
     $ref: types.yaml#/definitions/uint32
 
