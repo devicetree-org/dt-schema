@@ -27,6 +27,7 @@ properties:
       - handset
       - watch
       - embedded
+      - television
   "#address-cells":
     enum: [1, 2]
   "#size-cells":
