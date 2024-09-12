@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright Ayush Singh <ayush@beagleboard.org>
+
+$id: http://devicetree.org/schemas/gpio/gpio-nexus-node.yaml#
+$schema: http://devicetree.org/meta-schemas/base.yaml#
+
+title: GPIO Nexus node properties
+
+description: Schema for nexus node devicetree bindings
+maintainers:
+  - Ayush Singh <ayush@beagleboard.org>
+
+# always select the core schema
+select: true
+
+properties:
+  "#gpio-cells": true
+  gpio-map:
+    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+  gpio-map-mask:
+    $ref: types.yaml#/definitions/uint32-array
+  gpio-map-pass-thru:
+    $ref: types.yaml#/definitions/uint32-array
+
+dependentRequired:
+  gpio-map: ['#gpio-cells']
+  'gpio-map-mask': [ gpio-map ]
+  'gpio-map-pass-thru': [ gpio-map ]
+
+additionalProperties: true
