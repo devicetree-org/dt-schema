@@ -195,7 +195,10 @@ def get_prop_types(schemas):
     props = extract_types(schemas)
 
     # hack to remove aliases and generic patterns
-    del props[r'^[a-z][a-z0-9\-]*$']
+    try:
+        del props[r'^[a-z][a-z0-9\-]*$']
+    except:
+        pass
 
     # Remove all node types
     for val in props.values():
