@@ -110,6 +110,26 @@ properties:
         enabled)
       2: console output is suppressed and not recorded
 
+  boot-led:
+    $ref: /schemas/types.yaml#/definitions/phandle
+    description: |
+      This is used to specify a phandle to an LED to indicate a successful boot.
+
+  boot-led-period-ms:
+    default: 250
+    description: |
+      This is used to specify the default period (in ms) for an LED in blink mode.
+
+  activity-led:
+    $ref: /schemas/types.yaml#/definitions/phandle
+    description: |
+      This is used to specify a phandle to an LED to indicate an activity.
+
+  activity-led-period-ms:
+    default: 250
+    description: |
+      This is used to specify the default period (in ms) for an LED in blink mode.
+
 required:
   - compatible
 
