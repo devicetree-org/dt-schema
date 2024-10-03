@@ -110,6 +110,28 @@ properties:
         enabled)
       2: console output is suppressed and not recorded
 
+  boot-led:
+    $ref: /schemas/types.yaml#/definitions/string
+    description: |
+      This is used to specify the label for an LED to indicate a successful boot.
+
+  boot-led-period:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    default: 250
+    description: |
+      This is used to specify the default period for an LED in blink mode.
+
+  activity-led:
+    $ref: /schemas/types.yaml#/definitions/string
+    description: |
+      This is used to specify the label for an LED to indicate an activity.
+
+  activity-led-period:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    default: 250
+    description: |
+      This is used to specify the default period for an LED in blink mode.
+
 required:
   - compatible
 
