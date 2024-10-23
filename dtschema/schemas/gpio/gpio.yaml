@@ -35,10 +35,9 @@ properties:
 
 dependencies:
   gpio-controller: ['#gpio-cells']
-  '#gpio-cells': [ gpio-controller ]
-  gpio-line-names: ['#gpio-cells']
-  ngpios: ['#gpio-cells']
-  gpio-reserved-ranges: ['#gpio-cells']
-  gpio-ranges: ['#gpio-cells']
+  gpio-line-names: ['#gpio-cells', gpio-controller]
+  ngpios: ['#gpio-cells', gpio-controller]
+  gpio-reserved-ranges: ['#gpio-cells', gpio-controller]
+  gpio-ranges: ['#gpio-cells', gpio-controller]
 
 additionalProperties: true
