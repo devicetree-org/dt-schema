@@ -159,6 +159,46 @@ properties:
   vpcie3v3aux-supply:
     description: 3.3v AUX regulator phandle for the slot
 
+  eq-presets-8gts:
+    description:
+      Contains the equalization preset values for PCIe data rates 8.0 GT/s.
+      Each preset value is used to adjust the transmitter settings to improve
+      signal quality and meet the electrical requirements. These preset values
+      go in Lane Equalization Control registers (PCIe r6.0, sec 7.7.3.4).
+    $ref: /schemas/types.yaml#/definitions/uint16-array
+    minItems: 1
+    maxItems: 16
+
+  eq-presets-16gts:
+    description:
+      Contains the equalization preset values for PCIe data rates 16.0 GT/s.
+      Each preset value is used to adjust the transmitter settings to improve
+      signal quality and meet the electrical requirements. These preset values
+      go in Lane Equalization Control registers (PCIe r6.0, sec 7.7.5.9).
+    $ref: /schemas/types.yaml#/definitions/uint8-array
+    minItems: 1
+    maxItems: 16
+
+  eq-presets-32gts:
+    description:
+      Contains the equalization preset values for PCIe data rates 32.0 GT/s.
+      Each preset value is used to adjust the transmitter settings to improve
+      signal quality and meet the electrical requirements. These preset values
+      go in Lane Equalization Control registers (PCIe r6.0, sec 7.7.6.9).
+    $ref: /schemas/types.yaml#/definitions/uint8-array
+    minItems: 1
+    maxItems: 16
+
+  eq-presets-64gts:
+    description:
+      Contains the equalization preset values for PCIe data rates 64.0 GT/s.
+      Each preset value is used to adjust the transmitter settings to improve
+      signal quality and meet the electrical requirements. These preset values
+      go in Lane Equalization Control registers (PCIe r6.0, sec 7.7.7.5).
+    $ref: /schemas/types.yaml#/definitions/uint8-array
+    minItems: 1
+    maxItems: 16
+
 patternProperties:
   "@1?[0-9a-f](,[0-7])?$":
     type: object
