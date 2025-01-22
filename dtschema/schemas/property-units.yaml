@@ -85,6 +85,9 @@ patternProperties:
   "-nanoamp$":
     $ref: types.yaml#/definitions/uint32-array
     description: nanoampere
+  "-picoamp$":
+    $ref: types.yaml#/definitions/uint32-array
+    description: picoampere
   "-microamp-hours$":
     $ref: types.yaml#/definitions/uint32-array
     description: microampere hour
