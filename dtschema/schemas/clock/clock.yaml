@@ -131,6 +131,16 @@ properties:
     $ref: /schemas/types.yaml#/definitions/uint32-array
   assigned-clock-rates-u64:
     $ref: /schemas/types.yaml#/definitions/uint64-array
+  assigned-clock-sscs:
+    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+    items:
+      items:
+        - description: The modulation frequency
+        - description: The modulation depth in permyriad
+        - description: The modulation method, down-spread(3), up-spread(2),
+            center-spread(1), no-spread(0)
+          minimum: 0
+          maximum: 3
 
   protected-clocks:
     $ref: /schemas/types.yaml#/definitions/uint32-array
@@ -150,6 +160,7 @@ dependentRequired:
   assigned-clock-parents: [assigned-clocks]
   assigned-clock-rates: [assigned-clocks]
   assigned-clock-rates-u64: [assigned-clocks]
+  assigned-clock-sscs: [assigned-clocks]
   protected-clocks: ["#clock-cells"]
 
 dependentSchemas:
