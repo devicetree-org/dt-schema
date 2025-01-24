@@ -28,6 +28,7 @@ properties:
       - watch
       - embedded
       - television
+      - spectacles
   "#address-cells":
     enum: [1, 2]
   "#size-cells":
