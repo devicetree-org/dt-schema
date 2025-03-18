@@ -334,6 +334,9 @@ def fixup_node_props(schema):
     if 'ranges' in schema['properties']:
         schema['properties'].setdefault('dma-ranges', True)
 
+    if 'reg' in schema['properties']:
+        schema['properties'].setdefault('nonposted-mmio', True)
+
     keys = list(schema['properties'].keys())
     if 'patternProperties' in schema:
         keys.extend(schema['patternProperties'])
