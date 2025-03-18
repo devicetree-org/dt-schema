@@ -44,6 +44,14 @@ properties:
     $ref: types.yaml#/definitions/uint32
     enum: [ 0, 1, 2 ]
 
+  nonposted-mmio:
+    $ref: types.yaml#/definitions/flag
+    description:
+      If present, specifies that the device represented by this node (and
+      its children, if any) should use non-posted memory accesses for
+      accessing the memory described by /reg and any other inferred MMIO
+      regions.
+
 additionalProperties: true
 
 dependencies:
