@@ -351,6 +351,7 @@ def fixup_node_props(schema):
         schema['properties']['assigned-clock-rates-u64'] = True
         schema['properties']['assigned-clock-rates'] = True
         schema['properties']['assigned-clock-parents'] = True
+        schema['properties']['assigned-clock-sscs'] = True
 
 
 # Convert to standard types from ruamel's CommentedMap/Seq
