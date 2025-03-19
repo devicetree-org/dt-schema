@@ -51,6 +51,13 @@ patternProperties:
             minItems: 1
             maxItems: 1024
           - $ref: types.yaml#/definitions/flag
+      nonposted-mmio:
+        $ref: types.yaml#/definitions/flag
+        description:
+          If present, specifies that the device represented by this node (and
+          its children, if any) should use non-posted memory accesses for
+          accessing the memory described by /reg and any other inferred MMIO
+          regions.
     anyOf:
       - required:
           - reg
