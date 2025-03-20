@@ -228,6 +228,38 @@ properties:
     description:
       Version of the mmap descriptor format.
 
+  linux,kho-fdt:
+    $ref: types.yaml#/definitions/address
+    maxItems: 1
+    description: |
+      This property holds the memory range, the address and the size, of the
+      KHO state blob carrying system states passed from the previous kernel
+      across kexec.
+
+      / {
+        chosen {
+          linux,booted-from-kexec;
+          linux,kho-scratch = <0x00 0xb4df0000 0x00 0x30>;
+          linux,kho-fdt = <0x00 0xb4e00000 0x00 0xa00000>;
+        };
+      };
+
+      This property does not represent a real hardware. The address
+      and the size are expressed in #address-cells and #size-cells,
+      respectively, of the root node.
+
+  linux,kho-scratch:
+    $ref: types.yaml#/definitions/address
+    maxItems: 1
+    description: |
+      This property holds the memory range, the address and the size, of the
+      KHO scratch region information passed from the previous kernel
+      across kexec.
+
+      This property does not represent a real hardware. The address
+      and the size are expressed in #address-cells and #size-cells,
+      respectively, of the root node.
+
   u-boot,bootconf:
     $ref: types.yaml#/definitions/string
     description:
