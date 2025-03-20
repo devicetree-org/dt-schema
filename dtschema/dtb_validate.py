@@ -17,6 +17,8 @@ compatible_match = False
 
 
 class schema_group():
+    failure = False
+
     def __init__(self, schema_file=""):
         if schema_file != "" and not os.path.exists(schema_file):
             exit(-1)
@@ -60,12 +62,15 @@ class schema_group():
                         continue
                     print(f"{filename}: {fullname}: failed to match any schema with compatible: {node['compatible']}",
                           file=sys.stderr)
+                    self.failure = True
                     continue
 
                 print(dtschema.format_error(filename, error, nodename=nodename, verbose=verbose),
                     file=sys.stderr)
+                self.failure = True
         except RecursionError as e:
             print(os.path.basename(sys.argv[0]) + ": recursion error: Check for prior errors in a referenced schema", file=sys.stderr)
+            self.failure = True
 
     def check_subtree(self, tree, subtree, disabled, nodename, fullname, filename):
         if nodename.startswith('__'):
@@ -152,3 +157,6 @@ def main():
         if verbose:
             print("Check:  " + filename)
         sg.check_dtb(filename)
+
+    if sg.failure:
+        sys.exit(1)
