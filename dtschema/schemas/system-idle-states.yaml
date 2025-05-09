@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright 2025 BayLibre
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/system-idle-states.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: System Idle States
+
+maintainers:
+  - Markus Schneider-Pargmann <msp@baylibre.com>
+
+description: >
+  A system idle state node represents a system state that can have certain
+  limitations and power properties.
+
+properties:
+  $nodename:
+    const: system-idle-states
+
+patternProperties:
+  "^system-":
+    type: object
+    additionalProperties: false
+    description:
+      The node represents a system state description.
+
+    properties:
+      compatible:
+        const: system-idle-state
+
+      idle-state-name:
+        $ref: /schemas/types.yaml#/definitions/string
+        description:
+          Name of the system state.
+
+    required:
+      - compatible
+
+additionalProperties: false
+
+examples:
+  - |
+    system-idle-states {
+      system-deep-sleep {
+        compatible = "system-idle-state";
+        idle-state-name = "deep-sleep";
+      };
+
+      system-off {
+        compatible = "system-idle-state";
+      };
+    };
