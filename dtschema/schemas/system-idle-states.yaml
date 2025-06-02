@@ -1,0 +1,70 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright 2025 BayLibre
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/system-idle-states.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: System Idle States
+
+maintainers:
+  - Markus Schneider-Pargmann <msp@baylibre.com>
+
+description:
+  A system idle state node represents a system state that can have certain
+  limitations and power properties.
+
+properties:
+  $nodename:
+    const: system-idle-states
+
+patternProperties:
+  "^system-[a-z0-9-]+$":
+    type: object
+    additionalProperties: false
+    description:
+      The node represents a system state description.
+
+    properties:
+      compatible:
+        const: system-idle-state
+
+      idle-state-name:
+        $ref: /schemas/types.yaml#/definitions/string
+        description: |
+          Name of the system state. These are the available states:
+          - standby: Light suspend, peripherals may remain active
+          - mem-mcu-active: DDR in self-refresh, MCU/coprocessor running,
+            main cores off
+          - mem: DDR in self-refresh, all cores off
+          - mem-deep: DDR in self-refresh, all other hardware off except
+            some wake logic
+          - off-wake: System powered off, wake-up logic remains active
+          - off: Complete power off, lowest possible power state
+        enum:
+          - standby
+          - mem-mcu-active
+          - mem
+          - mem-deep
+          - off-wake
+          - off
+
+    required:
+      - compatible
+      - idle-state-name
+
+additionalProperties: false
+
+examples:
+  - |
+    system-idle-states {
+      system-suspend {
+        compatible = "system-idle-state";
+        idle-state-name = "mem";
+      };
+
+      system-off {
+        compatible = "system-idle-state";
+        idle-state-name = "off";
+      };
+    };
