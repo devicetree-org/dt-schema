@@ -327,6 +327,7 @@ def fixup_node_props(schema):
         schema['properties']['assigned-clock-rates-u64'] = True
         schema['properties']['assigned-clock-rates'] = True
         schema['properties']['assigned-clock-parents'] = True
+        schema['properties']['assigned-clock-sscs'] = True
 
     # 'dma-ranges' allowed when 'ranges' is present
     if 'ranges' in keys:
@@ -355,7 +356,6 @@ def fixup_node_props(schema):
         schema['properties'].setdefault('pinctrl-names', True)
         schema.setdefault('patternProperties', dict())
         schema['patternProperties']['^pinctrl-[0-9]+$'] = True
-
 
 # Convert to standard types from ruamel's CommentedMap/Seq
 def convert_to_dict(schema):
