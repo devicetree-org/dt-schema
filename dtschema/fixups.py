@@ -80,7 +80,7 @@ def _fixup_remove_empty_items(subschema):
 
 
 # Keep in sync with property-units.yaml
-unit_types_array_re = re.compile('-(kBps|bits|percent|bp|mhz|sec|ms|us|ns|ps|mm|nanoamp|(micro-)?ohms|micro(amp|watt)(-hours)?|milliwatt|(femto|pico)farads|(milli)?celsius|kelvin|k?pascal)$')
+unit_types_array_re = re.compile('-(kBps|bits|percent|bp|db|mhz|sec|ms|us|ns|ps|mm|nanoamp|(micro-)?ohms|micro(amp|watt)(-hours)?|milliwatt|(femto|pico)farads|(milli)?celsius|kelvin|k?pascal)$')
 unit_types_matrix_re = re.compile('-(hz|microvolt)$')
 
 def _fixup_unit_suffix_props(subschema, path=[]):

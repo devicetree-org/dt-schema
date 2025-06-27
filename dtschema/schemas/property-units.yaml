@@ -49,6 +49,10 @@ patternProperties:
     $ref: types.yaml#/definitions/int32-array
     description: basis points (1/100 of a percent)
 
+  "-db$":
+    $ref: types.yaml#/definitions/int32-array
+    description: decibels
+
   # Time/Frequency
   "-mhz$":
     $ref: types.yaml#/definitions/uint32-array

@@ -66,7 +66,7 @@ definitions:
         propertyNames:
           enum: [ description, deprecated ]
 
-      '-(bits|bps|kBps|percent|bp|mhz|hz|sec|ms|us|ns|ps|mm|nanoamp|microamp(-hours)?|micro-ohms|microwatt-hours|microvolt|(femto|pico)farads|(milli)?celsius|kelvin|k?pascal)$':
+      '-(bits|bps|kBps|percent|bp|db|mhz|hz|sec|ms|us|ns|ps|mm|nanoamp|microamp(-hours)?|micro-ohms|microwatt-hours|microvolt|(femto|pico)farads|(milli)?celsius|kelvin|k?pascal)$':
         $ref: '#/definitions/unit-suffix-properties'
 
       # Some special cases which don't match the normal size.

@@ -19,7 +19,7 @@ patternProperties:
   '-(gpio|gpios)$': true
   '-supply$': true
   '^rcar_sound,': true
-  '-(bits|bps|kBps|percent|bp|mhz|hz|sec|ms|us|ns|ps|mm)$': true
+  '-(bits|bps|kBps|percent|bp|db|mhz|hz|sec|ms|us|ns|ps|mm)$': true
   '-(nanoamp|microamp|microamp-hours|ohms|micro-ohms|microwatt-hours)$': true
   '-(microvolt|(femto|pico)farads|celsius|millicelsius|kelvin|k?pascal)$': true
 
