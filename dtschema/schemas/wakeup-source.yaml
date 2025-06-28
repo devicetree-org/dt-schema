@@ -9,7 +9,9 @@ title: Wakeup sources
 
 description: >
   Nodes that describe devices which have wakeup capability may contain a
-  "wakeup-source" boolean property.
+  "wakeup-source" property. This property can be either boolean or a phandle
+  array containing references to system idle states in which this device has a
+  wakeup capability.
 
   If the device is marked as a wakeup-source, interrupt wake capability depends
   on the device specific "interrupt-names" property. If no interrupts are labeled
@@ -30,7 +32,12 @@ select: true
 
 properties:
   wakeup-source:
-    type: boolean
+    oneOf:
+      - type: boolean
+      - $ref: /schemas/types.yaml#/definitions/phandle-array
+        description: >
+          List of phandles to system idle state nodes. The device can be a
+          wakeup source in the given system states.
 
 additionalProperties: true
 
@@ -68,5 +75,14 @@ examples:
             label = "POWER";
             gpios = <&iofpga_gpio0 0 0x4>;
         };
+    };
+  - |
+    # With power states specified
+    mcu_mcan0: can@4e08000 {
+        compatible = "bosch,m_can";
+        reg = <0x00 0x4e08000 0x00 0x200>,
+              <0x00 0x4e00000 0x00 0x8000>;
+        reg-names = "m_can", "message_ram";
+        wakeup-source = <&system_partial_io>, <&system_deep_sleep>;
     };
 ...
