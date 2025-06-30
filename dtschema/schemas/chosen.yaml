@@ -66,6 +66,17 @@ properties:
 
       This random value should be provided by bootloader.
 
+  arm,security-state:
+    $ref: types.yaml#/definitions/string
+    enum: [ non-secure, secure ]
+    description:
+      This property indicates the boot CPU's security state at the time
+      control was handed off to the OS. It's mainly useful on ARMv7,
+      where no generic mechanism exists to query the security state.
+      The OS can make use of this information to skip privileged errata
+      fixups that are off limits for non-secure software executing
+      in the normal world.
+
   linux,booted-from-kexec:
     type: boolean
     description:
