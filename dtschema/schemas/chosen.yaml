@@ -273,6 +273,28 @@ properties:
       This property is used by U-Boot to pass its version down to the operating
       system.
 
+  devicetree-path:
+    $ref: types.yaml#/definitions/string-array
+    items:
+      - $ref: types.yaml#/definitions/string
+        pattern: "^.*\\.dtb$"
+      - $ref: types.yaml#/definitions/string
+        pattern: "^.*\\.dtbo$"
+    additionalItems: true
+    minItems: 1
+    description:
+      This property describes the path to this devicetree blob relative to the
+      install directory. It may be used by bootloaders to load an alternative
+      version of the devicetree blob (e.g. the one associated with a specific
+      kernel version).
+
+      Additional items describe the path to any device tree overlays that should
+      be applied to the devicetree blob. An example is provided below.
+
+      devicetree-path = "qcom/qcs6490-rb3gen2.dtb",
+                        "qcom/qcs6490-rb3gen2-overlay1.dtbo",
+                        "qcom/qcs6490-rb3gen2-overlay2.dtbo";
+
 patternProperties:
   "^framebuffer": true
 
