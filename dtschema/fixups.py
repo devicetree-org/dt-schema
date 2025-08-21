@@ -92,6 +92,9 @@ def _fixup_unit_suffix_props(subschema, path=[]):
     else:
         return
 
+    if '$ref' in subschema:
+        return
+
     if unit_types_array_re.search(propname) and _is_int_schema(subschema):
         subschema['items'] = [_extract_single_schemas(subschema)]
     elif unit_types_matrix_re.search(propname):
