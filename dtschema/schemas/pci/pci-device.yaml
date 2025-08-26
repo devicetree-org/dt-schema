@@ -59,6 +59,10 @@ properties:
     description: The PCI device ID
     $ref: /schemas/types.yaml#/definitions/uint32
 
+  wake-gpios:
+    description: GPIO controlled connection to WAKE# signal
+    maxItems: 1
+
 required:
   - reg
 
