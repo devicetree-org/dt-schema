@@ -146,6 +146,10 @@ properties:
     description: GPIO controlled connection to WAKE# signal
     maxItems: 1
 
+  w-disable1-gpios:
+    description: GPIO controlled connection to W_DISABLE1# signal
+    maxItems: 1
+
   slot-power-limit-milliwatt:
     description:
       If present, specifies slot power limit in milliwatts.
@@ -178,6 +182,9 @@ properties:
 
   vpcie3v3aux-supply:
     description: 3.3v AUX regulator phandle for the slot
+
+  vio1v8-supply:
+    description: 1.8v VIO regulator phandle for the slot
 
   eq-presets-8gts:
     description:
