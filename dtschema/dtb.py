@@ -82,7 +82,7 @@ def prop_value(validator, nodename, p):
     data = bytes(p)
     fmt = None
 
-    if nodename in {'__fixups__', 'aliases'}:
+    if p.name != 'phandle' and nodename in {'__fixups__', 'aliases'}:
         return data[:-1].decode(encoding='ascii').split('\0')
 
     prop_types = set(validator.property_get_type(p.name))
