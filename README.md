@@ -161,8 +161,8 @@ This code depends on at least version 4.1.2 of the
 [Python jsonschema](https://github.com/Julian/jsonschema/tree/master)
 library for Draft 2019-09 support.
 
-The module can be installed directly from github with pip:
+The module can be installed with pip:
 
 ```
-pip3 install git+https://github.com/Julian/jsonschema.git
+pip3 install jsonschema-4.17.3
 ```
