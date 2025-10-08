@@ -147,15 +147,12 @@ Note: The above installation instructions handle all of the dependencies
 automatically.
 
 This code depends on Python 3 with the pylibfdt, ruamel.yaml, rfc3987, and jsonschema
-libraries. Installing pylibfdt depends on the 'swig' program.
+libraries. Building pylibfdt depends on the 'swig' program.
 
-On Debian/Ubuntu, the dependencies can be installed with apt and/or pip. The
-rfc3987 module is not packaged, so pip must be used:
+On Debian/Ubuntu, the dependencies can be installed with apt and/or pip.
 
 ```
-sudo apt install swig
-sudo apt install python3 python3-ruamel.yaml
-pip3 install rfc3987
+sudo apt install python3 python3-libfdt python3-ruamel.yaml python3-rfc3987
 ```
 
 
