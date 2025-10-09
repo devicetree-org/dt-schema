@@ -267,6 +267,14 @@ def fixup_interrupts(schema, path):
         if len(schema['required']) == 0:
             schema.pop('required')
 
+    if 'dependentRequired' in schema and 'interrupts' in schema['dependentRequired'] and \
+       'interrupts-extended' not in schema['dependentRequired']:
+        schema['dependentRequired']['interrupts-extended'] = schema['dependentRequired']['interrupts']
+
+    if 'dependentSchemas' in schema and 'interrupts' in schema['dependentSchemas'] and \
+       'interrupts-extended' not in schema['dependentSchemas']:
+        schema['dependentSchemas']['interrupts-extended'] = schema['dependentSchemas']['interrupts']
+
 
 known_variable_matrix_props = {
     'fsl,pins',
@@ -279,6 +287,7 @@ def fixup_sub_schema(schema, path=[]):
         return
 
     schema.pop('description', None)
+    fixup_schema_to_201909(schema)
     fixup_interrupts(schema, path)
     fixup_node_props(schema)
 
@@ -309,8 +318,6 @@ def fixup_sub_schema(schema, path=[]):
             walk_properties(v[prop], path=path + [k, prop])
             # Recurse to check for {properties,patternProperties} in each prop
             fixup_sub_schema(v[prop], path=path + [k, prop])
-
-    fixup_schema_to_201909(schema)
 
 
 def fixup_node_props(schema):
