@@ -152,5 +152,5 @@ libraries. Building pylibfdt depends on the 'swig' program.
 On Debian/Ubuntu, the dependencies can be installed with apt and/or pip.
 
 ```
-sudo apt install python3 python3-libfdt python3-ruamel.yaml python3-rfc3987
+sudo apt install python3 python3-jsonschema python3-libfdt python3-ruamel.yaml python3-rfc3987
 ```
