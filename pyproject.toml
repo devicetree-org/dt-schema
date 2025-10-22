@@ -9,7 +9,7 @@ write_to = "dtschema/version.py"
 name = "dtschema"
 description = "DeviceTree validation schema and tools"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 license = {file = "LICENSE.txt"}
 authors = [
   {name = "Rob Herring", email = "robh@kernel.org"},
