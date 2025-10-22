@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Copyright 2018 Linaro Ltd.
+%YAML 1.2
+---
 $id: http://devicetree.org/schemas/gpio/gpio-hog.yaml#
 $schema: http://devicetree.org/meta-schemas/base.yaml#
 
@@ -46,10 +48,10 @@ required:
 
 oneOf:
   - required:
-    - input
+      - input
   - required:
-    - output-high
+      - output-high
   - required:
-    - output-low
+      - output-low
 
 additionalProperties: false

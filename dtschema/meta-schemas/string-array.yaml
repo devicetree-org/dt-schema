@@ -5,7 +5,6 @@
 ---
 $id: http://devicetree.org/meta-schemas/string-array.yaml#
 $schema: https://json-schema.org/draft/2019-09/schema
-#type: object
 
 if:
   not:

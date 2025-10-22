@@ -23,34 +23,34 @@ patternProperties:
   '-(nanoamp|microamp|microamp-hours|ohms|micro-ohms|microwatt-hours)$': true
   '-(microvolt|(femto|pico)farads|celsius|millicelsius|kelvin|k?pascal)$': true
 
-  ",.*-names$":
+  ',.*-names$':
     type: object
     required:
       - description
 
 additionalProperties:
-    type: [boolean, object]
-    description: Vendor specific properties must have a type and description
-      unless they have a defined, common suffix.
+  type: [boolean, object]
+  description: Vendor specific properties must have a type and description
+    unless they have a defined, common suffix.
 
-    properties:
-      type:
-        description: 'A vendor boolean property can use "type: boolean"'
-        const: boolean
+  properties:
+    type:
+      description: 'A vendor boolean property can use "type: boolean"'
+      const: boolean
 
-    dependentRequired:
-      type: [description]
+  dependentRequired:
+    type: [description]
 
-    anyOf:
-      - properties:
-          $ref:
-            description: A vendor property needs a $ref to types.yaml
-            pattern: "types.yaml#\/definitions\/"
-        dependentRequired:
-          $ref: [description]
-      - properties:
-          $ref:
-            description: A vendor property can have a $ref to a a $defs schema
-            pattern: "^#\/(definitions|\\$defs)\/"
+  anyOf:
+    - properties:
+        $ref:
+          description: A vendor property needs a $ref to types.yaml
+          pattern: 'types.yaml#\/definitions\/'
+      dependentRequired:
+        $ref: [description]
+    - properties:
+        $ref:
+          description: A vendor property can have a $ref to a a $defs schema
+          pattern: '^#\/(definitions|\$defs)\/'
 
 ...

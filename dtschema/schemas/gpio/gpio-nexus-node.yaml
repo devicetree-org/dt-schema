@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Copyright Ayush Singh <ayush@beagleboard.org>
-
+%YAML 1.2
+---
 $id: http://devicetree.org/schemas/gpio/gpio-nexus-node.yaml#
 $schema: http://devicetree.org/meta-schemas/base.yaml#
 
@@ -14,7 +15,7 @@ maintainers:
 select: true
 
 properties:
-  "#gpio-cells": true
+  '#gpio-cells': true
   gpio-map:
     $ref: /schemas/types.yaml#/definitions/uint32-matrix
   gpio-map-mask:
@@ -24,7 +25,7 @@ properties:
 
 dependentRequired:
   gpio-map: ['#gpio-cells']
-  'gpio-map-mask': [ gpio-map ]
-  'gpio-map-pass-thru': [ gpio-map ]
+  gpio-map-mask: [ gpio-map ]
+  gpio-map-pass-thru: [ gpio-map ]
 
 additionalProperties: true

@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Copyright 2021 Arm Ltd.
+%YAML 1.2
+---
 $id: http://devicetree.org/schemas/interconnects.yaml#
 $schema: http://devicetree.org/meta-schemas/base.yaml#
 

@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Copyright 2018 Linaro Ltd.
 # Copyright 2018 Arm Ltd.
-
+%YAML 1.2
+---
 $id: http://devicetree.org/schemas/interrupts.yaml#
 $schema: http://devicetree.org/meta-schemas/base.yaml#
 

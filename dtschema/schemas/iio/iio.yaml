@@ -23,14 +23,14 @@ description:
   accelerations on the 3 axis.
 
 properties:
-  "#io-channel-cells":
+  '#io-channel-cells':
     enum: [0, 1, 2]
     description: >
       Number of cells in an IIO specifier; Typically 0 for nodes
       with a single IIO output and 1 for nodes with multiple IIO outputs.
       A few unusual devices have a 2 level mapping.
 
-  "#io-backend-cells":
+  '#io-backend-cells':
     enum: [0, 1]
     description:
       Number of cells in an IIO backend; Typically 0 for nodes

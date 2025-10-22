@@ -20,8 +20,8 @@ properties:
     pattern: 'http://devicetree.org/schemas(/[^/ ]+)+\.yaml#'
   $schema:
     enum:
-      - "http://devicetree.org/meta-schemas/core.yaml#"
-      - "http://devicetree.org/meta-schemas/base.yaml#"
+      - http://devicetree.org/meta-schemas/core.yaml#
+      - http://devicetree.org/meta-schemas/base.yaml#
   title:
     maxLength: 100
     description:

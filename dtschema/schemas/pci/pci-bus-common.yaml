@@ -26,7 +26,7 @@ maintainers:
 
 properties:
   $nodename:
-    pattern: "^pcie?@"
+    pattern: '^pcie?@'
 
   ranges:
     oneOf:
@@ -66,10 +66,10 @@ properties:
                 - 0x42000000
                 - 0x43000000
 
-  "#address-cells":
+  '#address-cells':
     const: 3
 
-  "#size-cells":
+  '#size-cells':
     const: 2
 
   device_type:
@@ -91,7 +91,7 @@ properties:
       malicious devices to this port.
     type: boolean
 
-  "#interrupt-cells":
+  '#interrupt-cells':
     const: 1
 
   interrupt-map: true
@@ -220,7 +220,7 @@ properties:
     maxItems: 16
 
 patternProperties:
-  "@1?[0-9a-f](,[0-7])?$":
+  '@1?[0-9a-f](,[0-7])?$':
     type: object
     $ref: pci-device.yaml#
     additionalProperties: true
@@ -228,7 +228,7 @@ patternProperties:
 required:
   - device_type
   - ranges
-  - "#address-cells"
-  - "#size-cells"
+  - '#address-cells'
+  - '#size-cells'
 
 additionalProperties: true

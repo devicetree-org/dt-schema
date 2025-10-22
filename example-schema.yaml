@@ -94,8 +94,8 @@ properties:
     # minItems must be specified here because the default would be 2
     minItems: 1
     items:
-      - const: "tx irq"
-      - const: "rx irq"
+      - const: tx irq
+      - const: rx irq
 
   # Property names starting with '#' must be quoted
   '#interrupt-cells':

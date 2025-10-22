@@ -37,8 +37,8 @@ properties:
 
   reg-names:
     items:
-      - const: "coreAAA"
-      - const: "aux"
+      - const: coreAAA
+      - const: aux
 
   interrupts:
     minItems: 1
@@ -49,8 +49,8 @@ properties:
   interrupt-names:
     minItems: 1
     items:
-      - const: "tx irq"
-      - const: "rx irq"
+      - const: tx irq
+      - const: rx irq
 
   '#interrupt-cells':
     const: 2
@@ -69,8 +69,8 @@ properties:
 
   clock-names:
     items:
-      - const: "clk1"
-      - const: "clk2"
+      - const: clk1
+      - const: clk2
 
   '#clock-cells':
     const: 1

@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Copyright 2019 Arm Ltd.
+%YAML 1.2
+---
 $id: http://devicetree.org/schemas/phy/phy-provider.yaml#
 $schema: http://devicetree.org/meta-schemas/base.yaml#
 
@@ -14,7 +16,7 @@ select: true
 properties:
   # Recommended node names: (|usb-|usb2-|usb3-|pci-|pcie-|sata-)phy
 
-  "#phy-cells": true
+  '#phy-cells': true
 
   phy-supply: true
 

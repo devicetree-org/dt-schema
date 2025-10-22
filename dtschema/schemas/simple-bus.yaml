@@ -14,15 +14,15 @@ maintainers:
 
 properties:
   $nodename:
-    pattern: "^([a-z][a-z0-9\\-]+-bus|bus|localbus|soc|axi|ahb|apb)(@.+)?$"
+    pattern: '^([a-z][a-z0-9\-]+-bus|bus|localbus|soc|axi|ahb|apb)(@.+)?$'
   compatible:
     contains:
       const: simple-bus
   ranges: true
   dma-ranges: true
-  "#address-cells":
+  '#address-cells':
     enum: [ 1, 2 ]
-  "#size-cells":
+  '#size-cells':
     enum: [ 1, 2 ]
   nonposted-mmio:
     $ref: /schemas/types.yaml#/definitions/flag
@@ -33,7 +33,7 @@ properties:
 
 patternProperties:
   # All other properties should be child nodes with unit-address and 'reg'
-  "@(0|[1-9a-f][0-9a-f]*)$":
+  '@(0|[1-9a-f][0-9a-f]*)$':
     type: object
     additionalProperties: true
     properties:
@@ -73,6 +73,6 @@ additionalProperties:
 
 required:
   - compatible
-  - "#address-cells"
-  - "#size-cells"
+  - '#address-cells'
+  - '#size-cells'
   - ranges

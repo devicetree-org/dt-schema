@@ -15,8 +15,9 @@ maintainers:
 
 properties:
   $nodename:
-    const: "/"
-  model: { "$ref" : "types.yaml#/definitions/string-array"}
+    const: '/'
+  model:
+    $ref: types.yaml#/definitions/string-array
   chassis-type:
     enum:
       - desktop
@@ -30,9 +31,9 @@ properties:
       - embedded
       - television
       - spectacles
-  "#address-cells":
+  '#address-cells':
     enum: [1, 2]
-  "#size-cells":
+  '#size-cells':
     enum: [1, 2]
 
   dma-coherent: true
@@ -41,7 +42,7 @@ properties:
   memory: false
 
 patternProperties:
-  "@(0|[1-9a-f][0-9a-f]*)$":
+  '@(0|[1-9a-f][0-9a-f]*)$':
     type: object
     additionalProperties: true
 
@@ -69,8 +70,8 @@ patternProperties:
 required:
   - compatible
   - model
-  - "#address-cells"
-  - "#size-cells"
+  - '#address-cells'
+  - '#size-cells'
 
 additionalProperties: true
 

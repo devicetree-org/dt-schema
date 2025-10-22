@@ -28,10 +28,10 @@ properties:
 
 dependentRequired:
   interrupt-map: ['#interrupt-cells']
-  'interrupt-map-mask': [ interrupt-map ]
+  interrupt-map-mask: [ interrupt-map ]
 
 dependentSchemas:
-  'interrupts':
+  interrupts:
     properties:
       interrupt-parent: false # interrupt-parent is implicitly allowed (added by tooling)
 

@@ -44,7 +44,7 @@ properties:
     const: aliases
 
 patternProperties:
-  "^[a-z][a-z0-9\\-]*$":
+  '^[a-z][a-z0-9\-]*$':
     $ref: types.yaml#/definitions/string
 additionalProperties: false
 

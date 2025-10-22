@@ -74,7 +74,7 @@ properties:
 
   native-endian:
     $ref: types.yaml#/definitions/flag
-    description:
+    description: >
       Always use register accesses matched to the endianness of the CPU. In this
       case no byte swaps will ever be performed.  Use this if the hardware
       "self-adjusts" register endianness based on the CPU's configured
@@ -83,7 +83,7 @@ properties:
 additionalProperties: true
 
 dependencies:
-  "#size-cells": [ "#address-cells" ]
+  '#size-cells': [ '#address-cells' ]
   big-endian: [ reg ]
   little-endian: [ reg ]
   native-endian: [ reg ]

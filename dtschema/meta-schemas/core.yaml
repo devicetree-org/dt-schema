@@ -25,7 +25,7 @@ definitions:
 
   all-properties:
     allOf:
-      - $ref: "#/definitions/core-properties"
+      - $ref: '#/definitions/core-properties'
       - $ref: clocks.yaml#
       - $ref: dma.yaml#
       - $ref: gpios.yaml#
@@ -86,9 +86,9 @@ definitions:
           type:
             enum: [ boolean, object ]
           properties:
-            $ref: "#/definitions/all-properties"
+            $ref: '#/definitions/all-properties'
           patternProperties:
-            $ref: "#/definitions/all-properties"
+            $ref: '#/definitions/all-properties'
           $ref:
             pattern: '(#$|#\/)?'
 
@@ -111,42 +111,42 @@ definitions:
                 - required: [ $ref ]
 
     dependentRequired:
-      "#size-cells": [ "#address-cells" ]
+      '#size-cells': [ '#address-cells' ]
       memory-region-names: [ memory-region ]
       reg-names: [ reg ]
 
 properties:
   patternProperties:
-    $ref: "#/definitions/all-properties"
+    $ref: '#/definitions/all-properties'
   properties:
-    $ref: "#/definitions/all-properties"
+    $ref: '#/definitions/all-properties'
   allOf:
     items:
       properties:
         properties:
-          $ref: "#/definitions/all-properties"
+          $ref: '#/definitions/all-properties'
         patternProperties:
-          $ref: "#/definitions/all-properties"
+          $ref: '#/definitions/all-properties'
   anyOf:
     items:
       properties:
         properties:
-          $ref: "#/definitions/all-properties"
+          $ref: '#/definitions/all-properties'
         patternProperties:
-          $ref: "#/definitions/all-properties"
+          $ref: '#/definitions/all-properties'
   oneOf:
     items:
       properties:
         properties:
-          $ref: "#/definitions/all-properties"
+          $ref: '#/definitions/all-properties'
         patternProperties:
-          $ref: "#/definitions/all-properties"
+          $ref: '#/definitions/all-properties'
   if:
     properties:
       properties:
-        $ref: "#/definitions/all-properties"
+        $ref: '#/definitions/all-properties'
       patternProperties:
-        $ref: "#/definitions/all-properties"
+        $ref: '#/definitions/all-properties'
 
 anyOf:
   - required:

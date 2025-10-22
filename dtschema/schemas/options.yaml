@@ -72,8 +72,8 @@ properties:
   $nodename:
     const: options
 
-  "#address-cells": true
-  "#size-cells": true
+  '#address-cells': true
+  '#size-cells': true
 
 additionalProperties:
   type: object

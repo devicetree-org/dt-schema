@@ -28,14 +28,14 @@ properties:
           - unknown: {}
           - enum:
               - 456
-              - "example,board1-with-soc1"
-              - "example,board2-with-soc1"
+              - example,board1-with-soc1
+              - example,board2-with-soc1
           - const: 789
       - items:
           - enum:
               - 987
-              - "example,board-with-soc2"
-          - const: "example,soc2"
+              - example,board-with-soc2
+          - const: example,soc2
         additionalItems: false
     minItems: 0
     maxItems: 2
@@ -52,19 +52,19 @@ properties:
     rob: {}
     minItems: 3
     items:
-      - "rob"
-      - const: "string_with_illegal characters #?"
+      - rob
+      - const: 'string_with_illegal characters #?'
       - const: 0
 
   interrupt-controller:
     type: integer
 
   '#interrupt-cells':
-    const: 'foo'
+    const: foo
     description: 0
 
   gpio-controller:
-    const: 'foo'
+    const: foo
 
   some-gpio:
     minItems: 0

@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Copyright 2018 Linaro Ltd.
+%YAML 1.2
+---
 $id: http://devicetree.org/schemas/gpio/gpio.yaml#
 $schema: http://devicetree.org/meta-schemas/base.yaml#
 
@@ -24,7 +26,7 @@ maintainers:
 select: true
 
 properties:
-  "#gpio-cells": true
+  '#gpio-cells': true
   gpio-controller:
     $ref: /schemas/types.yaml#/definitions/flag
   gpio-line-names:

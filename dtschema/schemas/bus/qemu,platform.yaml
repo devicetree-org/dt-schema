@@ -27,9 +27,9 @@ properties:
   ranges: true
   dma-ranges: true
 
-  "#address-cells":
+  '#address-cells':
     enum: [ 1, 2 ]
-  "#size-cells":
+  '#size-cells':
     enum: [ 1, 2 ]
 
   nonposted-mmio:
@@ -43,14 +43,14 @@ properties:
 
 patternProperties:
   # All other properties should be child nodes with unit-address and 'reg'
-  "@(0|[1-9a-f][0-9a-f]*)$":
+  '@(0|[1-9a-f][0-9a-f]*)$':
     type: object
 
 additionalProperties: false
 
 required:
   - compatible
-  - "#address-cells"
-  - "#size-cells"
+  - '#address-cells'
+  - '#size-cells'
   - ranges
 ...

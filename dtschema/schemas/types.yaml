@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Copyright 2018 Linaro Ltd.
+%YAML 1.2
+---
 $id: http://devicetree.org/schemas/types.yaml#
 $schema: http://devicetree.org/meta-schemas/base.yaml#
 
@@ -25,11 +27,11 @@ definitions:
     minItems: 1
   string-array:
     allOf:
-      - $ref: "#/definitions/non-unique-string-array"
+      - $ref: '#/definitions/non-unique-string-array'
       - uniqueItems: true
   string:
     allOf:
-      - $ref: "#/definitions/string-array"
+      - $ref: '#/definitions/string-array'
       - maxItems: 1
   uint8:
     type: integer
@@ -40,12 +42,12 @@ definitions:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/uint8"
+      $ref: '#/definitions/uint8'
   uint8-matrix:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/uint8-array"
+      $ref: '#/definitions/uint8-array'
 
   int8:
     type: integer
@@ -56,12 +58,12 @@ definitions:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/int8"
+      $ref: '#/definitions/int8'
   int8-matrix:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/int8-array"
+      $ref: '#/definitions/int8-array'
 
   uint16:
     type: integer
@@ -72,12 +74,12 @@ definitions:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/uint16"
+      $ref: '#/definitions/uint16'
   uint16-matrix:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/uint16-array"
+      $ref: '#/definitions/uint16-array'
 
   int16:
     type: integer
@@ -88,12 +90,12 @@ definitions:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/int16"
+      $ref: '#/definitions/int16'
   int16-matrix:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/int16-array"
+      $ref: '#/definitions/int16-array'
 
   uint32:
     type: integer
@@ -104,12 +106,12 @@ definitions:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/uint32"
+      $ref: '#/definitions/uint32'
   uint32-matrix:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/uint32-array"
+      $ref: '#/definitions/uint32-array'
 
   int32:
     type: integer
@@ -119,12 +121,12 @@ definitions:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/int32"
+      $ref: '#/definitions/int32'
   int32-matrix:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/int32-array"
+      $ref: '#/definitions/int32-array'
 
   int64:
     type: integer
@@ -135,12 +137,12 @@ definitions:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/int64"
+      $ref: '#/definitions/int64'
   int64-matrix:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/int64-array"
+      $ref: '#/definitions/int64-array'
 
   uint64:
     type: integer
@@ -151,15 +153,15 @@ definitions:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/uint64"
+      $ref: '#/definitions/uint64'
   uint64-matrix:
     type: array
     minItems: 1
     items:
-      $ref: "#/definitions/uint64-array"
+      $ref: '#/definitions/uint64-array'
 
   phandle:
-    $ref: "#/definitions/phandle-array"
+    $ref: '#/definitions/phandle-array'
     maxItems: 1
     items:
       maxItems: 1
@@ -177,10 +179,10 @@ definitions:
             - type: integer
               const: 0
       additionalItems:
-        $ref: "#/definitions/uint32"
+        $ref: '#/definitions/uint32'
 
   address:
-    $ref: "#/definitions/uint32-matrix"
+    $ref: '#/definitions/uint32-matrix'
     items:
       minItems: 1
       maxItems: 5 # At most 3 address cells and 2 size cells

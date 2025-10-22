@@ -74,7 +74,7 @@ properties:
     $ref: /schemas/types.yaml#/definitions/uint32
 
   # Provider properties
-  "#clock-cells":
+  '#clock-cells':
     description: Number of cells in a clock specifier; Typically 0 for
       nodes with a single clock output and 1 for nodes with multiple clock
       outputs.
@@ -154,19 +154,19 @@ properties:
 
 dependentRequired:
   clock-names: [clocks]
-  clock-output-names: ["#clock-cells"]
+  clock-output-names: ['#clock-cells']
   clock-indices: [clock-output-names]
   clock-ranges: [clocks]
   assigned-clock-parents: [assigned-clocks]
   assigned-clock-rates: [assigned-clocks]
   assigned-clock-rates-u64: [assigned-clocks]
   assigned-clock-sscs: [assigned-clocks]
-  protected-clocks: ["#clock-cells"]
+  protected-clocks: ['#clock-cells']
 
 dependentSchemas:
   assigned-clocks:
     anyOf:
       - required: [clocks]
-      - required: ["#clock-cells"]
+      - required: ['#clock-cells']
 
 additionalProperties: true

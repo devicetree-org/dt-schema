@@ -53,10 +53,10 @@ $defs:
       required.
 
     properties:
-      "#address-cells":
+      '#address-cells':
         const: 1
 
-      "#size-cells":
+      '#size-cells':
         const: 0
 
       reg:
@@ -66,23 +66,23 @@ $defs:
         type: object
 
     patternProperties:
-      "^endpoint@[0-9a-f]+$":
-        $ref: "#/$defs/endpoint-base"
+      '^endpoint@[0-9a-f]+$':
+        $ref: '#/$defs/endpoint-base'
         required:
           - reg
 
 properties:
   endpoint:
-    $ref: "#/$defs/endpoint-base"
+    $ref: '#/$defs/endpoint-base'
     unevaluatedProperties: false
 
   port:
-    $ref: "#/$defs/port-base"
+    $ref: '#/$defs/port-base'
     unevaluatedProperties: false
 
     patternProperties:
-      "^endpoint(@[0-9a-f]+)?$":
-        $ref: "#/properties/endpoint"
+      '^endpoint(@[0-9a-f]+)?$':
+        $ref: '#/properties/endpoint'
 
   ports:
     type: object
@@ -93,17 +93,17 @@ properties:
       from any other child device nodes a device might have.
 
     properties:
-      "#address-cells":
+      '#address-cells':
         const: 1
 
-      "#size-cells":
+      '#size-cells':
         const: 0
 
       port:
         type: object
 
     patternProperties:
-      "^port@[0-9a-f]+$":
+      '^port@[0-9a-f]+$':
         type: object
         required:
           - reg
@@ -112,8 +112,8 @@ properties:
       - required:
           - port
       - required:
-          - "#address-cells"
-          - "#size-cells"
+          - '#address-cells'
+          - '#size-cells'
 
     additionalProperties: false
 

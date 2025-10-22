@@ -52,14 +52,14 @@ definitions:
 
   sub-schemas:
     allOf:
-      - $ref: "#"
+      - $ref: '#'
       - $ref: items.yaml#
       - $ref: types.yaml#
     propertyNames:
       # The subset of keywords allowed for sub-schema
       anyOf:
-        - $ref: "#/definitions/json-schema-prop-names"
-        - $ref: "#/definitions/overlapping-json-schema-prop-names"
+        - $ref: '#/definitions/json-schema-prop-names'
+        - $ref: '#/definitions/overlapping-json-schema-prop-names'
 
   scalar-prop-list:
     propertyNames:
@@ -79,19 +79,20 @@ definitions:
 # Array keywords should not be mixed with scalar keywords
 dependentSchemas:
   contains:
-    $ref: "#/definitions/scalar-prop-list"
+    $ref: '#/definitions/scalar-prop-list'
   items:
-    $ref: "#/definitions/scalar-prop-list"
+    $ref: '#/definitions/scalar-prop-list'
   maxItems:
-    $ref: "#/definitions/scalar-prop-list"
+    $ref: '#/definitions/scalar-prop-list'
   minItems:
-    $ref: "#/definitions/scalar-prop-list"
+    $ref: '#/definitions/scalar-prop-list'
   additionalProperties:
-    description: "'additionalProperties' depends on 'properties' or 'patternProperties'"
+    description: >
+      'additionalProperties' depends on 'properties' or 'patternProperties'
     if:
       properties:
         additionalProperties:
-            type: boolean
+          type: boolean
     then:
       anyOf:
         - required: [ type ]
@@ -113,11 +114,11 @@ properties:
     propertyNames:
       description: A json-schema keyword was found in $defs key.
       not:
-        $ref: "#/definitions/json-schema-prop-names"
+        $ref: '#/definitions/json-schema-prop-names'
     additionalProperties:
       description: $defs entries must contain schemas
       type: object
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
   $ref:
     description:
       References must start with '/schemas' or be relative to current
@@ -129,38 +130,39 @@ properties:
     oneOf:
       - type: object
         allOf:
-          - $ref: "#/definitions/sub-schemas"
+          - $ref: '#/definitions/sub-schemas'
       - type: boolean
   additionalProperties:
     oneOf:
       - type: object
         allOf:
-          - $ref: "#/definitions/sub-schemas"
+          - $ref: '#/definitions/sub-schemas'
       - type: boolean
   allOf:
     uniqueItems: true
     items:
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
   anyOf:
     uniqueItems: true
     items:
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
   contains:
-    $ref: "#/definitions/sub-schemas"
+    $ref: '#/definitions/sub-schemas'
   dependencies:
     additionalProperties:
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
   dependentRequired:
     uniqueItems: true
   dependentSchemas:
     additionalProperties:
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
   else:
-    $ref: "#/definitions/sub-schemas"
+    $ref: '#/definitions/sub-schemas'
   const:
     type: [ integer, string ]
   enum:
-    description: '"enum" must be an array of either integers or strings'
+    description: >
+      "enum" must be an array of either integers or strings'
     type: array
     uniqueItems: true
     oneOf:
@@ -169,27 +171,27 @@ properties:
       - items:
           type: string
   if:
-    $ref: "#/definitions/sub-schemas"
+    $ref: '#/definitions/sub-schemas'
   items:
     if:
       type: object
     then:
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
     else:
       type: array
       items:
-        $ref: "#/definitions/sub-schemas"
+        $ref: '#/definitions/sub-schemas'
   maxItems:
     minimum: 1
   minItems:
     description: An array property has at least 1 item or is not present
     minimum: 1
   not:
-    $ref: "#/definitions/sub-schemas"
+    $ref: '#/definitions/sub-schemas'
   oneOf:
     allOf:
       - items:
-          $ref: "#/definitions/sub-schemas"
+          $ref: '#/definitions/sub-schemas'
       - description: Use 'enum' rather than 'oneOf' + 'const' entries
         not:
           items:
@@ -203,38 +205,39 @@ properties:
         - description: Fixed strings belong in 'properties', not 'patternProperties'
           pattern: '[\^$()*@]'
           not:
-            pattern:  '^\^[a-zA-Z0-9,\-._#@]+\$$'
+            pattern: '^\^[a-zA-Z0-9,\-._#@]+\$$'
         - description: A json-schema keyword was found instead of a DT property name.
           not:
-            $ref: "#/definitions/json-schema-prop-names"
+            $ref: '#/definitions/json-schema-prop-names'
     additionalProperties:
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
   properties:
     propertyNames:
       allOf:
         - description: Expected a valid DT property name
-          pattern:  "^[#$a-zA-Z][a-zA-Z0-9#,+\\-._@]{0,63}$"
+          pattern: '^[#$a-zA-Z][a-zA-Z0-9#,+\-._@]{0,63}$'
         - description: A json-schema keyword was found instead of a DT property name.
           not:
-            $ref: "#/definitions/json-schema-prop-names"
+            $ref: '#/definitions/json-schema-prop-names'
     additionalProperties:
       type: [ object, boolean ]
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
   required:
-    description: "'required' must be valid DT property or node names"
+    description: >
+      'required' must be valid DT property or node names
     type: array
     uniqueItems: true
     items:
       pattern: '^([a-zA-Z#][a-zA-Z0-9#,+\-._@]{0,63}|\$nodename)$'
   select:
-    $ref: "#/definitions/sub-schemas"
+    $ref: '#/definitions/sub-schemas'
   then:
-    $ref: "#/definitions/sub-schemas"
+    $ref: '#/definitions/sub-schemas'
   unevaluatedProperties:
     if:
       type: object
     then:
-      $ref: "#/definitions/sub-schemas"
+      $ref: '#/definitions/sub-schemas'
     else:
       type: boolean
   uniqueItems:

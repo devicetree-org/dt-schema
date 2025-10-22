@@ -28,7 +28,7 @@ allOf:
 
 properties:
   $nodename:
-    pattern: 'cache'
+    pattern: cache
 
   compatible:
     const: cache

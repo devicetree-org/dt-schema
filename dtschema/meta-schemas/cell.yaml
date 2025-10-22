@@ -10,8 +10,8 @@ array:
   description: cell array properties must define how many entries and what the
     entries are when there is more than one entry.
   anyOf:
-    - description: 'Only "maxItems" is required for a single entry if there are
-        no constraints defined for the values.'
+    - description: Only "maxItems" is required for a single entry if there are
+        no constraints defined for the values.
       properties:
         maxItems:
           const: 1

@@ -22,7 +22,7 @@ properties:
     $ref: types.yaml#/definitions/string-array
     items:
       # Keep in sync with make_compatible_schema()
-      pattern: "^[a-zA-Z0-9][a-zA-Z0-9,+\\-._/]+$"
+      pattern: '^[a-zA-Z0-9][a-zA-Z0-9,+\-._/]+$'
   cpu:
     description:
       Phandles to a CPU node associated with the referring node.
@@ -61,32 +61,32 @@ properties:
     $ref: types.yaml#/definitions/uint32
 
 patternProperties:
-  "^#.*-cells$":
+  '^#.*-cells$':
     $ref: types.yaml#/definitions/uint32
     maximum: 8
 
-  ".*-names$":
+  '.*-names$':
     $ref: types.yaml#/definitions/non-unique-string-array
 
-  ".*-supply$":
+  '.*-supply$':
     oneOf:
       - type: object
       - $ref: types.yaml#/definitions/phandle
 
   # property and node namespace overlaps. Catch both here
-  "^[a-zA-Z0-9][a-zA-Z0-9#,+\\-._]{0,63}$":
+  '^[a-zA-Z0-9][a-zA-Z0-9#,+\-._]{0,63}$':
     type: [object, integer, array, boolean, 'null']
 
   # Anything with a '@' is definitely a node
-  "^[a-zA-Z0-9][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-fA-F]+(,[0-9a-fA-F]+)*$":
+  '^[a-zA-Z0-9][a-zA-Z0-9,+\-._]{0,63}@[0-9a-fA-F]+(,[0-9a-fA-F]+)*$':
     type: object
 
   # Anything beginnning and ending with '__' is a generated node
-  "^__.*__$":
+  '^__.*__$':
     type: object
 
   # Anything with a '#' is single cell number
-  "^#[a-zA-Z0-9,+\\-._]{0,63}$":
+  '^#[a-zA-Z0-9,+\-._]{0,63}$':
     $ref: types.yaml#/definitions/uint32
 
 additionalProperties: false

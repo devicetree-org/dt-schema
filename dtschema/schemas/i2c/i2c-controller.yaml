@@ -14,16 +14,16 @@ maintainers:
 
 properties:
   $nodename:
-    pattern: "^i2c(@.+|-[a-z0-9]+)?$"
+    pattern: '^i2c(@.+|-[a-z0-9]+)?$'
 
   i2c-bus:
     type: object
-    $ref: "#"
+    $ref: '#'
 
-  "#address-cells":
+  '#address-cells':
     const: 1
 
-  "#size-cells":
+  '#size-cells':
     const: 0
 
   clock-frequency:
