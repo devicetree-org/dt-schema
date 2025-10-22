@@ -154,15 +154,3 @@ On Debian/Ubuntu, the dependencies can be installed with apt and/or pip.
 ```
 sudo apt install python3 python3-libfdt python3-ruamel.yaml python3-rfc3987
 ```
-
-
-### jsonschema
-This code depends on at least version 4.1.2 of the
-[Python jsonschema](https://github.com/Julian/jsonschema/tree/master)
-library for Draft 2019-09 support.
-
-The module can be installed with pip:
-
-```
-pip3 install jsonschema-4.17.3
-```
