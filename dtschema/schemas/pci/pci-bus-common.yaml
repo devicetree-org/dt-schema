@@ -173,6 +173,9 @@ properties:
   vpcie12v-supply:
     description: 12v regulator phandle for the slot
 
+  vpcie1v8-supply:
+    description: 1.8v VIO regulator phandle for M.2 slot
+
   vpcie3v3-supply:
     description: 3.3v regulator phandle for the slot
 
