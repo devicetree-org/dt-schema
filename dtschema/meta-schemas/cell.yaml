@@ -56,8 +56,10 @@ array:
         additionalItems:
           type: boolean
           const: true
+        default: true
         description: true
         deprecated: true
+        uniqueItems: true
 
       additionalProperties: false
 

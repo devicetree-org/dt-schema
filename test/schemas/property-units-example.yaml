@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/property-units-example.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Test for property units
+
+maintainers:
+  - Rob Herring <robh@kernel.org>
+
+properties:
+  vendor,property-ms:
+    description: Array property in common units
+    minItems: 1
+    maxItems: 4
+    items:
+      enum: [0, 1, 2, 4]
+    default: [0, 0, 0, 0]
+
+additionalProperties: false
