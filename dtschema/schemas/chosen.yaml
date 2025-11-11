@@ -167,6 +167,18 @@ properties:
       will assign devices in its usual manner, otherwise it will not try to
       assign devices and instead use them as they are configured already.
 
+  nvmem-cells:
+    maxItems: 1
+    description:
+      A phandle to an NVMEM cell providing system-wide information.
+      Used in conjunction with 'nvmem-cell-names'.
+
+  nvmem-cell-names:
+    items:
+      - const: power-state-change-reason
+    description:
+      Indicates the NVMEM cell contains the last power state change reason
+
   stdout-path:
     $ref: types.yaml#/definitions/string
     pattern: '^[a-zA-Z0-9@/,+\-._]*(:[0-9]*[noe]?[78]?[r]?)?$'
