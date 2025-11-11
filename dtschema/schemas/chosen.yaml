@@ -167,6 +167,12 @@ properties:
       will assign devices in its usual manner, otherwise it will not try to
       assign devices and instead use them as they are configured already.
 
+  smbios3-entrypoint:
+    $ref: types.yaml#/definitions/address
+    maxItems: 1
+    description:
+      The physical address of the SMBIOSv3 entry point structure.
+
   stdout-path:
     $ref: types.yaml#/definitions/string
     pattern: '^[a-zA-Z0-9@/,+\-._]*(:[0-9]*[noe]?[78]?[r]?)?$'
