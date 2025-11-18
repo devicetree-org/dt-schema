@@ -51,7 +51,7 @@ def _is_node_schema(schema):
 
 
 def _schema_allows_no_undefined_props(schema):
-    if _is_node_schema(schema):
+    if not _is_node_schema(schema):
         return True
 
     additional_props = schema.get("additionalProperties", True)
@@ -195,7 +195,7 @@ class DTSchema(dict):
                           'else', 'dependencies', 'dependentSchemas'}:
                 return
 
-            if _is_node_schema(schema):
+            if _is_node_schema(schema) and not parent in {'oneOf', 'allOf', 'anyOf'}:
                 has_constraint = _schema_allows_no_undefined_props(schema)
 
             ref_has_constraint = True
