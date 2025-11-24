@@ -30,6 +30,8 @@ properties:
     minimum: 1
     maximum: 5000000
 
+  label: true
+
   i2c-scl-falling-time-ns:
     description:
       Number of nanoseconds the SCL signal takes to fall; t(f) in the I2C
