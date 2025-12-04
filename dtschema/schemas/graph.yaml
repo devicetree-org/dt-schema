@@ -31,8 +31,6 @@ description: |
 maintainers:
   - Philipp Zabel <p.zabel@pengutronix.de>
 
-select: false
-
 $defs:
   endpoint-base:
     type: object

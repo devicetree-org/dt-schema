@@ -13,8 +13,6 @@ description: Schema for core devicetree data types. Binding schema can reference
 maintainers:
   - Rob Herring <robh@kernel.org>
 
-select: true
-
 definitions:
   flag:
     oneOf:

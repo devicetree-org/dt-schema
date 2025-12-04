@@ -29,8 +29,6 @@ description: |+
 
   https://www.devicetree.org/specifications/
 
-select: false
-
 allOf:
   - $ref: cache-controller.yaml#
 
