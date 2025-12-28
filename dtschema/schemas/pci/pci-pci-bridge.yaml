@@ -28,4 +28,7 @@ properties:
     contains:
       const: pciclass,0604
 
+  port:
+    $ref: /schemas/graph.yaml#/properties/port
+
 additionalProperties: true
