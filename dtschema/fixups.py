@@ -267,9 +267,29 @@ def fixup_interrupts(schema, path):
         if len(schema['required']) == 0:
             schema.pop('required')
 
-    if 'dependentRequired' in schema and 'interrupts' in schema['dependentRequired'] and \
-       'interrupts-extended' not in schema['dependentRequired']:
-        schema['dependentRequired']['interrupts-extended'] = schema['dependentRequired']['interrupts']
+    if 'dependentRequired' in schema:
+        dep_req = schema['dependentRequired']
+        if 'interrupts' in dep_req and \
+           'interrupts-extended' not in dep_req:
+            dep_req['interrupts-extended'] = dep_req['interrupts']
+
+        for prop, val in dep_req.items():
+            if 'interrupts' not in val:
+                continue
+            schema['dependentSchemas'] = {}
+            schema['dependentSchemas'][prop] = {
+                'oneOf': [
+                    {'required': ['interrupts']},
+                    {'required': ['interrupts-extended']},
+                ]
+            }
+            dep_req[prop].remove('interrupts')
+            if len(dep_req[prop]) == 0:
+                dep_req.pop(prop)
+                break
+
+        if len(schema['dependentRequired']) == 0:
+            schema.pop('dependentRequired')
 
     if 'dependentSchemas' in schema and 'interrupts' in schema['dependentSchemas'] and \
        'interrupts-extended' not in schema['dependentSchemas']:
