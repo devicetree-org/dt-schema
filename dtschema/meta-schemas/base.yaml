@@ -38,7 +38,7 @@ properties:
   maintainers:
     type: array
     items:
-      pattern: '@'
+      pattern: '^(.+ <[\S]+@[\S]+>|[\S]+@[\S]+)$'
       type: string
       format: email
 
