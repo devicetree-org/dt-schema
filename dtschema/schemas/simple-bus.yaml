@@ -33,7 +33,7 @@ properties:
 
 patternProperties:
   # All other properties should be child nodes with unit-address and 'reg'
-  '@(0|[1-9a-f][0-9a-f]*)$':
+  '@([0-9a-f],)?(0|[1-9a-f][0-9a-f]*)$':
     type: object
     additionalProperties: true
     properties:
