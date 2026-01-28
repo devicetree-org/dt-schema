@@ -47,16 +47,20 @@ properties:
 
       Any RID r in the interval [rid-base, rid-base + length) is associated with
       the listed IOMMU, with the IOMMU specifier (r - rid-base + iommu-base).
-    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-    items:
-      items:
-        - description: RID base
-          maximum: 0xffff
-        - description: phandle to IOMMU
-        - description: IOMMU specifier base (currently always 1 cell)
-        - description: Number of RIDs
-          maximum: 0x10000
 
+      Field description:
+        rid-base:
+          Requester ID Base.
+        iommu:
+          Phandle to the IOMMU device.
+        iommu-base:
+          Iommu specifier base
+          The number of cells in this field is determined by 'iommu-cells'
+          property of the associated IOMMU node.
+        length:
+          Number of Requester ID's.
+
+    $ref: /schemas/types.yaml#/definitions/uint32-matrix
   iommu-map-mask:
     description:
       A mask to be applied to each Requester ID prior to being mapped to an
