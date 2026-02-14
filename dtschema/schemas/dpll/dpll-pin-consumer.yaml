@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/dpll/dpll-pin-consumer.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: DPLL Pin Consumer Properties
+
+maintainers:
+  - Ivan Vecera <ivecera@redhat.com>
+
+description:
+  Common properties for devices that require connection to DPLL (Digital Phase
+  Locked Loop) pins for frequency synchronization (e.g. SyncE).
+
+# always select the core schema
+select: true
+
+properties:
+  dpll-pins:
+    $ref: /schemas/types.yaml#/definitions/phandle-array
+    description:
+      List of phandles to the relevant DPLL device and pin specifier pairs,
+      one for each connection between the device and the DPLL.
+
+  dpll-pin-names:
+    $ref: /schemas/types.yaml#/definitions/string-array
+    description:
+      Names for the DPLL pins defined in 'dpll-pins', in the same order.
+
+dependencies:
+  dpll-pin-names: [ dpll-pins ]
+
+additionalProperties: true

@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/dpll/dpll-pin-provider.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: DPLL Pin Provider Properties
+
+maintainers:
+  - Ivan Vecera <ivecera@redhat.com>
+
+description:
+  Common properties for devices providing DPLL (Digital Phase
+  Locked Loop) pins to components that require frequency
+  synchronization (e.g., SyncE).
+
+# always select the core schema
+select: true
+
+properties:
+  '#dpll-pin-cells': true
+
+additionalProperties: true
