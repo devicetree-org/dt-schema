@@ -1,30 +1,29 @@
 # SPDX-License-Identifier: BSD-2-Clause
-# Copyright 2018 Linaro Ltd.
 %YAML 1.2
 ---
-$id: http://devicetree.org/schemas/gpio/gpio-hog.yaml#
+$id: http://devicetree.org/schemas/gpio/gpio-line.yaml#
 $schema: http://devicetree.org/meta-schemas/base.yaml#
 
-title: GPIO Hog Nodes
+title: GPIO Line Nodes
 
-description: Schema for GPIO hog devicetree bindings
+description: Schema for GPIO line initialization devicetree bindings
 
 maintainers:
   - Rob Herring <robh@kernel.org>
 
-# select this schema for GPIO hogs
+# select this schema for GPIO line setup nodes
 select:
   properties:
-    gpio-hog: true
+    gpio-line: true
 
   required:
-    - gpio-hog
+    - gpio-line
 
 properties:
   $nodename:
-    pattern: "-hog(-[0-9]+)?$"
+    pattern: "-line(-[0-9]+)?$"
 
-  gpio-hog:
+  gpio-line:
     $ref: /schemas/types.yaml#/definitions/flag
 
   gpios:
@@ -33,28 +32,17 @@ properties:
   input:
     $ref: /schemas/types.yaml#/definitions/flag
 
-  line-name:
-    $ref: /schemas/types.yaml#/definitions/string
-
-  gpio-line-name:
-    $ref: /schemas/types.yaml#/definitions/string
-
   output-high:
     $ref: /schemas/types.yaml#/definitions/flag
 
   output-low:
     $ref: /schemas/types.yaml#/definitions/flag
 
-required:
-  - gpio-hog
-  - gpios
+  gpio-line-name:
+    $ref: /schemas/types.yaml#/definitions/string
 
-oneOf:
-  - required:
-      - input
-  - required:
-      - output-high
-  - required:
-      - output-low
+required:
+  - gpio-line
+  - gpios
 
 additionalProperties: false
