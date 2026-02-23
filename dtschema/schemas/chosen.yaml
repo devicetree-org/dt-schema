@@ -116,6 +116,22 @@ properties:
       and the size are expressed in #address-cells and #size-cells,
       respectively, of the root node.
 
+  linux,dmcryptkeys:
+    $ref: types.yaml#/definitions/address
+    maxItems: 1
+    description: |
+      This property holds the memory range, the address and the size, of the
+      dm-crypt keys which is only accessible to the kdump kernel,
+
+      / {
+              chosen {
+                      linux,dmcryptkeys = <0x00 0xb557b000 0x00 0x188>;
+              };
+      };
+
+      Note this property is only needed by crash dump kernel. Thus it won't
+      be exposed to user space.
+
   linux,usable-memory-range:
     $ref: types.yaml#/definitions/address
     maxItems: 1
