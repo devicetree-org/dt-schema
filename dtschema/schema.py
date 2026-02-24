@@ -195,15 +195,20 @@ class DTSchema(dict):
                           'else', 'dependencies', 'dependentSchemas'}:
                 return
 
+            has_only_type = 'type' in schema and \
+                not (schema.keys() & {'properties', 'patternProperties', 'additionalProperties', 'unevaluatedProperties'})
+
             if _is_node_schema(schema) and not parent in {'oneOf', 'allOf', 'anyOf'}:
                 has_constraint = _schema_allows_no_undefined_props(schema)
+                ref_has_constraint = False
+            else:
+                ref_has_constraint = True
 
-            ref_has_constraint = True
             if '$ref' in schema:
                 ref_sch = resolver.lookup(schema['$ref']).contents
                 ref_has_constraint = _schema_allows_no_undefined_props(ref_sch)
 
-            if not (is_common or ref_has_constraint or has_constraint or
+            if not (is_common or ref_has_constraint or has_constraint or has_only_type or
                (schema.keys() & {'additionalProperties', 'unevaluatedProperties'})):
                 print(f"{self.filename}: {parent}: Missing additionalProperties/unevaluatedProperties constraint\n",
                       file=sys.stderr)
