@@ -52,6 +52,26 @@ properties:
       Address and Length pairs. Specifies regions of memory that are
       acceptable to allocate from.
 
+  ecc-detection-bits:
+    default: 0
+    description: |
+      If present, this indicates the number of bits of memory error
+      which can be detected and reported by the Error-Correction Code
+      (ECC) memory subsystem (typically 0, 1 or 2).
+
+  ecc-correction-bits:
+    default: 0
+    description: |
+      If present, this indicates the number of bits of memory error
+      which can be corrected by the Error-Correction Code (ECC) memory
+      subsystem (typically 0, 1 or 2).
+
+  export:
+    type: boolean
+    description: >
+      The operating system can use the memory to create special-purpose
+      allocators instead of solely dedicating it to the device.
+
   iommu-addresses:
     $ref: /schemas/types.yaml#/definitions/phandle-array
     description: >
