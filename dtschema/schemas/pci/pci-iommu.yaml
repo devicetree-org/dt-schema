@@ -35,8 +35,6 @@ description: |
 maintainers:
   - Rob Herring <robh@kernel.org>
 
-select: true
-
 properties:
   iommu-map:
     description: |
