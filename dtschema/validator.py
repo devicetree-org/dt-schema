@@ -423,7 +423,11 @@ class DTValidator:
         self.schemas['version'] = dtschema.__version__
 
     def retrieve(self, uri):
-        return DRAFT201909.create_resource(self.schemas[uri])
+        try:
+            schema = self.schemas[uri]
+        except KeyError:
+            schema = False
+        return DRAFT201909.create_resource(schema)
 
     def annotate_error(self, id, error):
         error.schema_file = id
