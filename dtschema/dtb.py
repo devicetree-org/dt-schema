@@ -112,9 +112,6 @@ def prop_value(validator, nodename, p):
         if len(p) > 0:
             prop_types -= {'flag'}
 
-        if prop_types >= {'phandle', 'phandle-array'}:
-            prop_types -= {'phandle'}
-
         # Drop the unsigned type if both signed and unsigned type exists
         if prop_types >= {'int64', 'uint64'}:
             prop_types -= {'uint64'}
@@ -126,10 +123,17 @@ def prop_value(validator, nodename, p):
             prop_types -= {'uint8'}
 
     dim = validator.property_get_type_dim(p.name)
-    matrix_prop_types = { t for t in prop_types if 'matrix' in t }
+    matrix_prop_types = { t for t in prop_types if 'matrix' in t or t == 'phandle-array' }
 
     if len(prop_types) > 1:
-        if {'string', 'string-array'} & prop_types:
+        if p.name == "dma-masters":
+            # Default for phandles, and then fixup later when we can more
+            # reliably detect what is or isn't a phandle in fixup_handles()
+            fmt = 'phandle-array'
+        elif p.name == "mode-gpios":
+            # "mode-gpios" also matches "^mode-" pattern, but it is always a GPIO
+            fmt = 'phandle-array'
+        elif {'string', 'string-array'} & prop_types:
             str = bytes_to_string(data)
             if str:
                 return str
@@ -142,21 +146,17 @@ def prop_value(validator, nodename, p):
             scalar_prop_types = prop_types - matrix_prop_types
             if len(scalar_prop_types) == 1:
                 fmt = scalar_prop_types.pop()
-                min_dim = dim[0][0] * dim[1][0]
+                min_dim = dim[1][0]
+                if min_dim == 0:
+                    min_dim = 1
+                min_dim *= dim[0][0]
+                #print(min_dim, type_format[fmt].size)
                 if len(p) / type_format[fmt].size >= min_dim:
                     fmt = matrix_prop_types.pop()
+                else:
+                    dim = [[1, 1], [1, 1]]
         else:
-            #print(p.name + ': multiple types found', file=sys.stderr)
-            # HACK around type collisions.
-            if p.name == "dma-masters":
-                # Default for phandles, and then fixup later when we can more
-                # reliably detect what is or isn't a phandle in fixup_handles()
-                fmt = 'phandle-array'
-            elif p.name == "mode-gpios":
-                # "mode-gpios" also matches "^mode-" pattern, but it is always a GPIO
-                fmt = 'phandle-array'
-            else:
-                fmt = None
+            fmt = None
     elif len(prop_types) == 1:
         fmt = prop_types.pop()
 
