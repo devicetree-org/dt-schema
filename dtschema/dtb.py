@@ -229,8 +229,11 @@ def node_props(validator, fdt, nodename, offset):
     poffset = fdt.first_property_offset(offset, QUIET_NOTFOUND)
     while poffset >= 0:
         p = fdt.get_property_by_offset(poffset)
-        props_dict[p.name] = prop_value(validator, nodename, p)
-
+        try:
+            props_dict[p.name] = prop_value(validator, nodename, p)
+        except:
+            print(f"Could not decode node {nodename} property {p.name} with value {bytes(p)}\n", file=sys.stderr)
+            raise
         poffset = fdt.next_property_offset(poffset, QUIET_NOTFOUND)
 
     return props_dict
