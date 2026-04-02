@@ -12,10 +12,11 @@ description: Schema for GPIO consumer devicetree bindings
 maintainers:
   - Rob Herring <robh@kernel.org>
 
-# do not select this schema for GPIO hogs
+# do not select this schema for GPIO hog/line child nodes
 select:
   properties:
     gpio-hog: false
+    gpio-line: false
 
 properties:
   gpios:
