@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/power/power-controller.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Generic System Power Control Capability
+
+maintainers:
+  - Peng Fan <peng.fan@nxp.com>
+
+description: |
+  Power-management integrated circuits or miscellaneous hardware components
+  are sometimes able to control the system power. The device driver associated
+  with these components might need to define this capability, which tells the
+  kernel that it can be used to switch off the system. The corresponding device
+  must have the standard property "system-power-controller" in its device node. This
+  property marks the device as able to control the system power.
+
+  In order to test if this property is found programmatically, use the helper
+  function "of_device_is_system_power_controller" from of.h.
+
+properties:
+  system-power-controller:
+    type: boolean
+    description:
+      Indicates that this device can be used to control the system power.
+
+additionalProperties: true
