@@ -64,6 +64,7 @@ properties:
     maxItems: 1
 
   t-power-on-us:
+    maximum: 3100
     description:
       The minimum amount of time that each component must wait in
       L1.2.Exit after sampling CLKREQ# asserted before actively driving
