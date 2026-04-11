@@ -43,19 +43,14 @@ properties:
       Maps a Requester ID to an IOMMU and associated IOMMU specifier data.
 
       The property is an arbitrary number of tuples of
-      (rid-base,iommu,iommu-base,length).
+      (rid-base, iommu, iommu-specifier, rid-length).
 
-      Any RID r in the interval [rid-base, rid-base + length) is associated with
-      the listed IOMMU, with the IOMMU specifier (r - rid-base + iommu-base).
+      The length of the iommu-specifier is determined by the #iommu-cells
+      property of the associated IOMMU node.
+
+      Any RID r in the interval [rid-base, rid-base + length) is associated
+      with the listed IOMMU, with the IOMMU specifier (r - rid-base + iommu-base).
     $ref: /schemas/types.yaml#/definitions/uint32-matrix
-    items:
-      items:
-        - description: RID base
-          maximum: 0xffff
-        - description: phandle to IOMMU
-        - description: IOMMU specifier base (currently always 1 cell)
-        - description: Number of RIDs
-          maximum: 0x10000
 
   iommu-map-mask:
     description:
@@ -179,5 +174,32 @@ examples:
           iommu-map = <0x0000 &iommu_a 0x0000 0x8000>,
                       <0x8000 &iommu_b 0x0000 0x8000>;
         };
+    };
+
+  - |
+    / {
+      #address-cells = <1>;
+      #size-cells = <1>;
+
+      iommu: iommu@a {
+          reg = <0xa 0x1>;
+          compatible = "foo,some-iommu";
+          #iommu-cells = <2>;
+      };
+
+      pci: pci@f {
+          reg = <0xf 0x1>;
+          compatible = "foo,pcie-root-complex";
+          device_type = "pci";
+
+          /*
+          * The IOMMU uses 2-cell specifiers (#iommu-cells = <2>).
+          * Each iommu-map entry has 5 cells:
+          * (rid-base, iommu, iommu-specifier[0], iommu-specifier[1], length)
+          * Multiple entries are supported.
+          */
+          iommu-map = <0x0000 &iommu 0x0 0x0 0x8000>,
+                      <0x8000 &iommu 0x0 0x1 0x8000>;
+      };
     };
 ...
