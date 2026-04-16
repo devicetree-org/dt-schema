@@ -168,6 +168,10 @@ properties:
     description: Disables ASPM L1 capability
     type: boolean
 
+  aspm-no-l1ss:
+    description: Disables ASPM L1 PM Substates capability
+    type: boolean
+
   aspm-l0s-entry-delay-ns:
     description: ASPM L0s entry delay
 
