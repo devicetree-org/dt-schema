@@ -17,6 +17,28 @@ match_schema_file = None
 compatible_match = False
 
 
+def _display_path(filename):
+    abspath = os.path.abspath(filename)
+    relpath = os.path.relpath(abspath)
+
+    if relpath == os.pardir or relpath.startswith(os.pardir + os.path.sep):
+        return abspath
+    return relpath
+
+
+def _replace_filename_prefix(text, old, new):
+    if text.startswith(old + ':'):
+        return new + text[len(old):]
+    return text
+
+
+def _format_error(filename, error, nodename=None, compatible=None, verbose=False):
+    text = dtschema.format_error(filename, error, nodename=nodename,
+                                 compatible=compatible, verbose=verbose)
+    return _replace_filename_prefix(text, os.path.abspath(filename),
+                                    _display_path(filename))
+
+
 def _error_path(path):
     return [str(p) if not isinstance(p, int) else p for p in path]
 
@@ -49,7 +71,7 @@ def _error_diagnostic(filename, error, nodename=None, fullname=None, compatible=
     diagnostic = {
         'type': 'validation',
         'level': 'error',
-        'file': os.path.abspath(filename),
+        'file': _display_path(filename),
         'line': line,
         'column': column,
         'node': fullname,
@@ -80,7 +102,7 @@ def _unmatched_diagnostic(filename, fullname, node):
     return {
         'type': 'unmatched',
         'level': 'warning',
-        'file': os.path.abspath(filename),
+        'file': _display_path(filename),
         'line': None,
         'column': None,
         'node': fullname,
@@ -140,17 +162,19 @@ class schema_group():
                 if error.schema_file == 'generated-compatibles':
                     if not show_unmatched:
                         continue
+                    text = (f"{_display_path(filename)}: {fullname}: failed to match "
+                            f"any schema with compatible: {node['compatible']}")
                     self.emit_diagnostic(
                         _unmatched_diagnostic(filename, fullname, node),
-                        f"{filename}: {fullname}: failed to match any schema with compatible: {node['compatible']}")
+                        text)
                     continue
 
                 if 'compatible' in node:
                     compat = node['compatible'][0]
                 else:
                     compat = None
-                text = dtschema.format_error(filename, error, nodename=nodename,
-                                             compatible=compat, verbose=verbose)
+                text = _format_error(filename, error, nodename=nodename,
+                                     compatible=compat, verbose=verbose)
                 self.emit_diagnostic(
                     _error_diagnostic(filename, error, nodename=nodename, fullname=fullname,
                                       compatible=compat, formatted=text),
@@ -159,13 +183,14 @@ class schema_group():
             self.emit_diagnostic({
                 'type': 'recursion-error',
                 'level': 'error',
-                'file': os.path.abspath(filename),
+                'file': _display_path(filename),
                 'line': None,
                 'column': None,
                 'node': fullname,
                 'nodename': nodename,
                 'message': 'recursion error: Check for prior errors in a referenced schema',
-            }, os.path.basename(sys.argv[0]) + ": recursion error: Check for prior errors in a referenced schema")
+            }, os.path.basename(sys.argv[0]) +
+                ": recursion error: Check for prior errors in a referenced schema")
 
     def check_subtree(self, tree, subtree, disabled, nodename, fullname, filename):
         if nodename.startswith('__'):

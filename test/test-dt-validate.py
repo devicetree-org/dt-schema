@@ -159,7 +159,7 @@ class TestDTValidate(unittest.TestCase):
 
         self.assertEqual(diagnostic["type"], "validation")
         self.assertEqual(diagnostic["level"], "error")
-        self.assertEqual(diagnostic["file"], os.path.abspath("test.dtb"))
+        self.assertEqual(diagnostic["file"], "test.dtb")
         self.assertEqual(diagnostic["line"], 5)
         self.assertEqual(diagnostic["column"], 9)
         self.assertEqual(diagnostic["node"], "/soc/device@0")
@@ -177,7 +177,7 @@ class TestDTValidate(unittest.TestCase):
 
         self.assertEqual(diagnostic["type"], "unmatched")
         self.assertEqual(diagnostic["level"], "warning")
-        self.assertEqual(diagnostic["file"], os.path.abspath("test.dtb"))
+        self.assertEqual(diagnostic["file"], "test.dtb")
         self.assertEqual(diagnostic["node"], "/soc/device@0")
         self.assertEqual(diagnostic["compatible"], ["test,device"])
         self.assertIn("failed to match any schema", diagnostic["message"])
@@ -210,8 +210,6 @@ class TestDTValidate(unittest.TestCase):
         self.assertIn("message", diagnostics[0])
         self.assertIn("formatted", diagnostics[0])
         self.assertIn("schema", diagnostics[0])
-
-
 
 if __name__ == '__main__':
     unittest.main()
