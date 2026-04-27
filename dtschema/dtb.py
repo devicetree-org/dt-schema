@@ -33,6 +33,12 @@ type_format = {
 }
 
 
+def _decode_error(validator, message):
+    print(message, file=sys.stderr)
+    if validator.decode_errors is not None:
+        validator.decode_errors.append(message)
+
+
 def bytes_to_string(b):
     try:
         strings = b.decode(encoding='ascii').split('\0')
@@ -199,8 +205,9 @@ def prop_value(validator, nodename, p):
     if {'flag'} & prop_types:
         if len(data):
             if fmt == 'flag':
-                print('{prop}: boolean property with value {val}'.format(prop=p.name, val=data),
-                      file=sys.stderr)
+                _decode_error(validator,
+                              '{prop}: boolean property with value {val}'.format(
+                                  prop=p.name, val=data))
                 return data
         else:
             return True
@@ -212,7 +219,9 @@ def prop_value(validator, nodename, p):
         for i in type_struct.iter_unpack(data):
             val_int += [dtschema.sized_int(i[0], size=(type_struct.size * 8))]
     except:
-        print('{prop}: size ({len}) error for type {fmt}'.format(prop=p.name, len=len(p), fmt=fmt), file=sys.stderr)
+        _decode_error(validator,
+                      '{prop}: size ({len}) error for type {fmt}'.format(
+                          prop=p.name, len=len(p), fmt=fmt))
         if len(p) == 4:
             type_struct = type_format['uint32']
         elif len(p) == 2:
