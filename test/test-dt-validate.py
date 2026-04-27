@@ -159,7 +159,7 @@ class TestDTValidate(unittest.TestCase):
 
         self.assertEqual(diagnostic["type"], "validation")
         self.assertEqual(diagnostic["level"], "error")
-        self.assertEqual(diagnostic["file"], os.path.abspath("test.dtb"))
+        self.assertEqual(diagnostic["file"], "test.dtb")
         self.assertEqual(diagnostic["line"], 5)
         self.assertEqual(diagnostic["column"], 9)
         self.assertEqual(diagnostic["node"], "/soc/device@0")
@@ -177,7 +177,7 @@ class TestDTValidate(unittest.TestCase):
 
         self.assertEqual(diagnostic["type"], "unmatched")
         self.assertEqual(diagnostic["level"], "warning")
-        self.assertEqual(diagnostic["file"], os.path.abspath("test.dtb"))
+        self.assertEqual(diagnostic["file"], "test.dtb")
         self.assertEqual(diagnostic["node"], "/soc/device@0")
         self.assertEqual(diagnostic["compatible"], ["test,device"])
         self.assertIn("failed to match any schema", diagnostic["message"])
@@ -185,6 +185,46 @@ class TestDTValidate(unittest.TestCase):
         diagnostic = dtschema.dtb_validate._unmatched_diagnostic(
             "test.dtb", "/", {"compatible": ["test,board"]})
         self.assertEqual(diagnostic["nodename"], "/")
+
+    def test_format_error_rewrites_indented_paths(self):
+        filename = "test.dtb"
+        abs_filename = os.path.abspath(filename)
+
+        leaf = jsonschema.ValidationError(
+            "leaf problem",
+            path=deque(["leaf"]),
+            schema_path=deque(["type"]))
+        leaf.linecol = (2, 0)
+        leaf.schema_file = "http://devicetree.org/schemas/test.yaml#"
+
+        inner = jsonschema.ValidationError(
+            "inner problem",
+            path=deque(["inner"]),
+            schema_path=deque(["anyOf"]))
+        inner.linecol = (1, 0)
+        inner.schema_file = "http://devicetree.org/schemas/test.yaml#"
+        inner.context = [leaf]
+
+        other = jsonschema.ValidationError(
+            "other problem",
+            path=deque(["other"]),
+            schema_path=deque(["type"]))
+        other.linecol = (3, 0)
+        other.schema_file = "http://devicetree.org/schemas/test.yaml#"
+
+        error = jsonschema.ValidationError(
+            "outer problem",
+            path=deque(["root"]),
+            schema_path=deque(["then"]))
+        error.linecol = (0, 0)
+        error.schema_file = "http://devicetree.org/schemas/test.yaml#"
+        error.context = [inner, other]
+
+        text = dtschema.dtb_validate._format_error(filename, error, nodename="node")
+
+        self.assertNotIn(abs_filename, text)
+        self.assertIn("test.dtb:1:1", text)
+        self.assertIn("\ttest.dtb:2:1", text)
 
     def test_json_cli_output_file(self):
         dtc = shutil.which('dtc')
@@ -216,8 +256,6 @@ class TestDTValidate(unittest.TestCase):
         self.assertIn("message", diagnostics[0])
         self.assertIn("formatted", diagnostics[0])
         self.assertIn("schema", diagnostics[0])
-
-
 
 if __name__ == '__main__':
     unittest.main()
