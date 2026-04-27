@@ -7,6 +7,7 @@ import sys
 import os
 import argparse
 import glob
+import json
 
 import dtschema
 
@@ -16,12 +17,93 @@ match_schema_file = None
 compatible_match = False
 
 
+def _error_path(path):
+    return [str(p) if not isinstance(p, int) else p for p in path]
+
+
+def _error_line_column(error):
+    linecol = getattr(error, 'linecol', (-1, -1))
+    if linecol[0] < 0:
+        return None, None
+    return linecol[0] + 1, linecol[1] + 1
+
+
+def _error_context(error):
+    context = {
+        'message': error.message,
+        'property_path': _error_path(error.absolute_path),
+        'schema_path': _error_path(error.absolute_schema_path),
+        'schema': getattr(error, 'schema_file', None),
+    }
+
+    note = getattr(error, 'note', None)
+    if note:
+        context['note'] = note
+
+    return context
+
+
+def _error_diagnostic(filename, error, nodename=None, fullname=None, compatible=None,
+                      formatted=None):
+    line, column = _error_line_column(error)
+    diagnostic = {
+        'type': 'validation',
+        'level': 'error',
+        'file': os.path.abspath(filename),
+        'line': line,
+        'column': column,
+        'node': fullname,
+        'nodename': nodename,
+        'compatible': compatible,
+        'property_path': _error_path(error.absolute_path),
+        'schema_path': _error_path(error.absolute_schema_path),
+        'schema': getattr(error, 'schema_file', None),
+        'message': error.message,
+    }
+
+    if formatted is not None:
+        diagnostic['formatted'] = formatted
+
+    note = getattr(error, 'note', None)
+    if note:
+        diagnostic['note'] = note
+
+    if error.context:
+        diagnostic['context'] = [_error_context(suberror)
+                                 for suberror in sorted(error.context, key=lambda e: e.path)]
+
+    return diagnostic
+
+
+def _unmatched_diagnostic(filename, fullname, node):
+    message = f"failed to match any schema with compatible: {node['compatible']}"
+    return {
+        'type': 'unmatched',
+        'level': 'warning',
+        'file': os.path.abspath(filename),
+        'line': None,
+        'column': None,
+        'node': fullname,
+        'nodename': os.path.basename(fullname) or fullname,
+        'compatible': node['compatible'],
+        'message': message,
+    }
+
+
 class schema_group():
-    def __init__(self, schema_file=""):
+    def __init__(self, schema_file="", output_format="text"):
         if schema_file != "" and not os.path.exists(schema_file):
             exit(-1)
 
         self.validator = dtschema.DTValidator([schema_file])
+        self.output_format = output_format
+        self.diagnostics = []
+
+    def emit_diagnostic(self, diagnostic, text=None):
+        if self.output_format == 'json':
+            self.diagnostics.append(diagnostic)
+        else:
+            print(text if text is not None else diagnostic['message'], file=sys.stderr)
 
     def check_node(self, tree, node, disabled, nodename, fullname, filename):
         # Hack to save some time validating examples
@@ -58,18 +140,32 @@ class schema_group():
                 if error.schema_file == 'generated-compatibles':
                     if not show_unmatched:
                         continue
-                    print(f"{filename}: {fullname}: failed to match any schema with compatible: {node['compatible']}",
-                          file=sys.stderr)
+                    self.emit_diagnostic(
+                        _unmatched_diagnostic(filename, fullname, node),
+                        f"{filename}: {fullname}: failed to match any schema with compatible: {node['compatible']}")
                     continue
 
                 if 'compatible' in node:
                     compat = node['compatible'][0]
                 else:
                     compat = None
-                print(dtschema.format_error(filename, error, nodename=nodename, compatible=compat, verbose=verbose),
-                    file=sys.stderr)
+                text = dtschema.format_error(filename, error, nodename=nodename,
+                                             compatible=compat, verbose=verbose)
+                self.emit_diagnostic(
+                    _error_diagnostic(filename, error, nodename=nodename, fullname=fullname,
+                                      compatible=compat, formatted=text),
+                    text)
         except RecursionError as e:
-            print(os.path.basename(sys.argv[0]) + ": recursion error: Check for prior errors in a referenced schema", file=sys.stderr)
+            self.emit_diagnostic({
+                'type': 'recursion-error',
+                'level': 'error',
+                'file': os.path.abspath(filename),
+                'line': None,
+                'column': None,
+                'node': fullname,
+                'nodename': nodename,
+                'message': 'recursion error: Check for prior errors in a referenced schema',
+            }, os.path.basename(sys.argv[0]) + ": recursion error: Check for prior errors in a referenced schema")
 
     def check_subtree(self, tree, subtree, disabled, nodename, fullname, filename):
         if nodename.startswith('__'):
@@ -116,6 +212,8 @@ def main():
         action="store_true")
     ap.add_argument('-n', '--line-number', help="Obsolete", action="store_true")
     ap.add_argument('-v', '--verbose', help="verbose mode", action="store_true")
+    ap.add_argument('--format', choices=['text', 'json'], default='text',
+                    help="diagnostic output format")
     ap.add_argument('-u', '--url-path', help="Additional search path for references (deprecated)")
     ap.add_argument('-V', '--version', help="Print version number",
                     action="version", version=dtschema.__version__)
@@ -136,23 +234,28 @@ def main():
             match_schema_file[i] = match
 
     if args.preparse:
-        sg = schema_group(args.preparse)
+        sg = schema_group(args.preparse, args.format)
     elif args.schema:
-        sg = schema_group(args.schema)
+        sg = schema_group(args.schema, args.format)
     else:
-        sg = schema_group()
+        sg = schema_group(output_format=args.format)
+
+    verbose_file = sys.stderr if args.format == 'json' else sys.stdout
 
     for d in args.dtbs:
         if not os.path.isdir(d):
             continue
         for filename in glob.iglob(d + "/**/*.dtb", recursive=True):
             if verbose:
-                print("Check:  " + filename)
+                print("Check:  " + filename, file=verbose_file)
             sg.check_dtb(filename)
 
     for filename in args.dtbs:
         if not os.path.isfile(filename):
             continue
         if verbose:
-            print("Check:  " + filename)
+            print("Check:  " + filename, file=verbose_file)
         sg.check_dtb(filename)
+
+    if args.format == 'json':
+        print(json.dumps(sg.diagnostics, indent=2))
