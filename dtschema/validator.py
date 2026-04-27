@@ -601,5 +601,9 @@ class DTValidator:
 
         return False
 
-    def decode_dtb(self, dtb):
-        return [dtschema.dtb.fdt_unflatten(self, dtb)]
+    def decode_dtb(self, dtb, decode_errors=None):
+        self.decode_errors = decode_errors
+        try:
+            return [dtschema.dtb.fdt_unflatten(self, dtb)]
+        finally:
+            self.decode_errors = None

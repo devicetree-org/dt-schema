@@ -251,11 +251,70 @@ class TestDTValidate(unittest.TestCase):
             diagnostics = json.load(json_output)
 
         self.assertGreater(len(diagnostics), 0)
-        self.assertEqual(diagnostics[0]["type"], "validation")
-        self.assertEqual(diagnostics[0]["level"], "error")
-        self.assertIn("message", diagnostics[0])
-        self.assertIn("formatted", diagnostics[0])
-        self.assertIn("schema", diagnostics[0])
+        validation = next(d for d in diagnostics if d["type"] == "validation")
+        self.assertEqual(validation["level"], "error")
+        self.assertIn("message", validation)
+        self.assertIn("formatted", validation)
+        self.assertIn("schema", validation)
+
+    def test_cli_cache_output(self):
+        dtc = shutil.which('dtc')
+        if not dtc:
+            self.skipTest("dtc not found")
+
+        with tempfile.NamedTemporaryFile(suffix=".dtb") as f, \
+             tempfile.NamedTemporaryFile(suffix=".dtb") as f2, \
+             tempfile.NamedTemporaryFile(suffix=".json") as schema, \
+             tempfile.NamedTemporaryFile(suffix=".json") as json_output, \
+             tempfile.TemporaryDirectory() as cache_dir:
+            res = subprocess.run([dtc, '-Odtb', '-o', f.name, 'test/device-fail.dts'],
+                                 capture_output=True)
+            self.assertEqual(res.returncode, 0, msg='dtc failed:\n' + res.stderr.decode())
+            shutil.copyfile(f.name, f2.name)
+
+            res = subprocess.run([
+                sys.executable, '-c',
+                'import dtschema.mk_schema as m; m.main()',
+                '-j', '-o', schema.name, os.path.abspath('test/schemas')],
+                capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0, msg=res.stderr)
+
+            cmd = [
+                sys.executable, '-c',
+                'import dtschema.dtb_validate as d; d.main()',
+                '--json-output', json_output.name, '--cache-dir', cache_dir,
+                '-s', schema.name, f.name]
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0, msg=res.stderr)
+            self.assertEqual(res.stdout, "")
+            self.assertIn("from schema $id:", res.stderr)
+            self.assertIn("vendor,bool-prop: size (5) error for type flag", res.stderr)
+            json_output.seek(0)
+            first = json.load(json_output)
+            decode = next(d for d in first if d["type"] == "decode" and
+                          d["message"] == "vendor,bool-prop: size (5) error for type flag")
+            self.assertEqual(decode["file"], f.name)
+
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0, msg=res.stderr)
+            self.assertEqual(res.stdout, "")
+            self.assertIn("from schema $id:", res.stderr)
+            self.assertIn("vendor,bool-prop: size (5) error for type flag", res.stderr)
+            json_output.seek(0)
+            self.assertEqual(json.load(json_output), first)
+            self.assertEqual(len(os.listdir(cache_dir)), 1)
+
+            cmd[-1] = f2.name
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0, msg=res.stderr)
+            self.assertEqual(res.stdout, "")
+            self.assertIn("from schema $id:", res.stderr)
+            json_output.seek(0)
+            second = json.load(json_output)
+            validation = next(d for d in second if d["type"] == "validation")
+            self.assertEqual(validation["file"], f2.name)
+            self.assertTrue(validation["formatted"].startswith(f2.name + ":"))
+            self.assertEqual(len(os.listdir(cache_dir)), 1)
 
 if __name__ == '__main__':
     unittest.main()
