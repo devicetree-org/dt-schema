@@ -12,14 +12,18 @@ import unittest
 import os
 import copy
 import glob
+import json
+import shutil
 import sys
 import subprocess
 import tempfile
+from collections import deque
 
 basedir = os.path.dirname(__file__)
 import jsonschema
 import ruamel.yaml
 import dtschema
+import dtschema.dtb_validate
 
 dtschema_dir = os.path.dirname(dtschema.__file__)
 
@@ -140,7 +144,116 @@ class TestDTValidate(unittest.TestCase):
                 else:
                     self.assertIsNone(self.check_subtree('/', testtree[0]))
 
+    def test_json_error_diagnostic(self):
+        error = jsonschema.ValidationError(
+            "'foo' is a required property",
+            path=deque(["soc", "device@0"]),
+            schema_path=deque(["then", "required"]))
+        error.linecol = (4, 8)
+        error.schema_file = "http://devicetree.org/schemas/test.yaml#"
+        error.note = "missing required property"
 
+        diagnostic = dtschema.dtb_validate._error_diagnostic(
+            "test.dtb", error, nodename="device@0", fullname="/soc/device@0",
+            compatible="test,device")
+
+        self.assertEqual(diagnostic["type"], "validation")
+        self.assertEqual(diagnostic["level"], "error")
+        self.assertEqual(diagnostic["file"], "test.dtb")
+        self.assertEqual(diagnostic["line"], 5)
+        self.assertEqual(diagnostic["column"], 9)
+        self.assertEqual(diagnostic["node"], "/soc/device@0")
+        self.assertEqual(diagnostic["nodename"], "device@0")
+        self.assertEqual(diagnostic["compatible"], "test,device")
+        self.assertEqual(diagnostic["property_path"], ["soc", "device@0"])
+        self.assertEqual(diagnostic["schema_path"], ["then", "required"])
+        self.assertEqual(diagnostic["schema"], "http://devicetree.org/schemas/test.yaml#")
+        self.assertEqual(diagnostic["message"], "'foo' is a required property")
+        self.assertEqual(diagnostic["note"], "missing required property")
+
+    def test_json_unmatched_diagnostic(self):
+        diagnostic = dtschema.dtb_validate._unmatched_diagnostic(
+            "test.dtb", "/soc/device@0", {"compatible": ["test,device"]})
+
+        self.assertEqual(diagnostic["type"], "unmatched")
+        self.assertEqual(diagnostic["level"], "warning")
+        self.assertEqual(diagnostic["file"], "test.dtb")
+        self.assertEqual(diagnostic["node"], "/soc/device@0")
+        self.assertEqual(diagnostic["compatible"], ["test,device"])
+        self.assertIn("failed to match any schema", diagnostic["message"])
+
+        diagnostic = dtschema.dtb_validate._unmatched_diagnostic(
+            "test.dtb", "/", {"compatible": ["test,board"]})
+        self.assertEqual(diagnostic["nodename"], "/")
+
+    def test_json_cli_output(self):
+        dtc = shutil.which('dtc')
+        if not dtc:
+            self.skipTest("dtc not found")
+
+        with tempfile.NamedTemporaryFile(suffix=".dtb") as f:
+            res = subprocess.run([dtc, '-Odtb', '-o', f.name, 'test/device-fail.dts'],
+                                 capture_output=True)
+            self.assertEqual(res.returncode, 0, msg='dtc failed:\n' + res.stderr.decode())
+
+            res = subprocess.run([
+                sys.executable, '-c',
+                'import dtschema.dtb_validate as d; d.main()',
+                '--format', 'json', '-s', os.path.abspath('test/schemas'), f.name],
+                capture_output=True, text=True)
+
+        self.assertEqual(res.returncode, 0, msg=res.stderr)
+        diagnostics = json.loads(res.stdout)
+        self.assertGreater(len(diagnostics), 0)
+        self.assertEqual(diagnostics[0]["type"], "validation")
+        self.assertEqual(diagnostics[0]["level"], "error")
+        self.assertIn("message", diagnostics[0])
+        self.assertIn("formatted", diagnostics[0])
+        self.assertIn("schema", diagnostics[0])
+
+    def test_cli_cache_output(self):
+        dtc = shutil.which('dtc')
+        if not dtc:
+            self.skipTest("dtc not found")
+
+        with tempfile.NamedTemporaryFile(suffix=".dtb") as f, \
+             tempfile.NamedTemporaryFile(suffix=".dtb") as f2, \
+             tempfile.NamedTemporaryFile(suffix=".json") as schema, \
+             tempfile.TemporaryDirectory() as cache_dir:
+            res = subprocess.run([dtc, '-Odtb', '-o', f.name, 'test/device-fail.dts'],
+                                 capture_output=True)
+            self.assertEqual(res.returncode, 0, msg='dtc failed:\n' + res.stderr.decode())
+            shutil.copyfile(f.name, f2.name)
+
+            res = subprocess.run([
+                sys.executable, '-c',
+                'import dtschema.mk_schema as m; m.main()',
+                '-j', '-o', schema.name, os.path.abspath('test/schemas')],
+                capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0, msg=res.stderr)
+
+            cmd = [
+                sys.executable, '-c',
+                'import dtschema.dtb_validate as d; d.main()',
+                '--format', 'json', '--cache-dir', cache_dir,
+                '-s', schema.name, f.name]
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0, msg=res.stderr)
+            first = json.loads(res.stdout)
+            self.assertEqual(first[0]["file"], f.name)
+
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0, msg=res.stderr)
+            self.assertEqual(json.loads(res.stdout), first)
+            self.assertEqual(len(os.listdir(cache_dir)), 1)
+
+            cmd[-1] = f2.name
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0, msg=res.stderr)
+            second = json.loads(res.stdout)
+            self.assertEqual(second[0]["file"], f2.name)
+            self.assertTrue(second[0]["formatted"].startswith(f2.name + ":"))
+            self.assertEqual(len(os.listdir(cache_dir)), 1)
 
 if __name__ == '__main__':
     unittest.main()
