@@ -519,7 +519,7 @@ class DTValidator:
 
             for v in val:
                 for sch_id in v['$id']:
-                    print(f"{self.schemas[sch_id]['$filename']}: {p}: multiple incompatible types: {v['type']}", file=sys.stderr)
+                    print(f"{self.schemas[sch_id.rstrip('#')]['$filename']}: {p}: multiple incompatible types: {v['type']}", file=sys.stderr)
 
     def make_property_type_cache(self):
         self.props, self.pat_props = get_prop_types(self.schemas)
