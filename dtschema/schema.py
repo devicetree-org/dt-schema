@@ -205,7 +205,7 @@ class DTSchema(dict):
 
             if not (is_common or ref_has_constraint or has_constraint or
                (schema.keys() & {'additionalProperties', 'unevaluatedProperties'})):
-                print(f"{self.filename}: {parent}: Missing additionalProperties/unevaluatedProperties constraint\n",
+                print(f"{self.filename}: {parent}: Missing additionalProperties/unevaluatedProperties constraint",
                       file=sys.stderr)
 
             for k, v in schema.items():
@@ -222,10 +222,11 @@ class DTSchema(dict):
         base_path = self.filename[:-len(base1)]
         base2 = self.filename.replace(base_path, '')
         if not base1 == base2:
-            print(f"{self.filename}: $id: Cannot determine base path from $id, relative path/filename doesn't match actual path or filename\n",
-                  f"\t $id: {id}\n",
-                  f"\tfile: {self.filename}",
-                  file=sys.stderr)
+            sys.stderr.write(
+                f"{self.filename}: $id: Cannot determine base path from $id, relative path/filename doesn't match actual path or filename\n"
+                f"\t $id: {id}\n"
+                f"\tfile: {self.filename}\n"
+            )
             return
 
         self.paths = [

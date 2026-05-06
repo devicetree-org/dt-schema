@@ -416,8 +416,10 @@ class DTValidator:
                     compatibles = set(compatibles) - {'syscon', 'simple-mfd', 'simple-bus'}
                 for c in compatibles:
                     if not schema_cache and c in self.compat_map:
-                        print(f'Warning: Duplicate compatible "{c}" found in schemas matching "$id":\n'
-                              f'\t{self.compat_map[c]}\n\t{sch["$id"]}', file=sys.stderr)
+                        sys.stderr.write(
+                            f'Warning: Duplicate compatible "{c}" found in schemas matching "$id":\n'
+                            f'\t{self.compat_map[c]}\n\t{sch["$id"]}\n'
+                        )
                     self.compat_map[c] = _id
 
         self.schemas['version'] = dtschema.__version__

@@ -27,7 +27,7 @@ def check_doc(filename):
 
     try:
         for error in sorted(dtsch.iter_errors(), key=lambda e: e.linecol):
-            print(dtschema.format_error(filename, error, verbose=verbose), file=sys.stderr)
+            sys.stderr.write(dtschema.format_error(filename, error, verbose=verbose) + "\n")
             ret = 1
     except:
         raise

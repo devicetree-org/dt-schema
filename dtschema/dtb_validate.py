@@ -66,8 +66,9 @@ class schema_group():
                     compat = node['compatible'][0]
                 else:
                     compat = None
-                print(dtschema.format_error(filename, error, nodename=nodename, compatible=compat, verbose=verbose),
-                    file=sys.stderr)
+                sys.stderr.write(
+                    dtschema.format_error(filename, error, nodename=nodename, compatible=compat, verbose=verbose) + "\n"
+                )
         except RecursionError as e:
             print(os.path.basename(sys.argv[0]) + ": recursion error: Check for prior errors in a referenced schema", file=sys.stderr)
 
