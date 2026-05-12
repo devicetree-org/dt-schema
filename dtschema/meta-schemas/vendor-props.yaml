@@ -12,6 +12,9 @@ properties:
   adi,channels:
     type: object
 
+  xlnx,channels:
+    type: object
+
 patternProperties:
   '[\[\]*{}$\^\\]+': true # exclude regex's
   '^[^,]*$': true
