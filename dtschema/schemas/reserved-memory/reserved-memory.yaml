@@ -16,7 +16,7 @@ description: >
   memory regions. Such memory regions are usually designed for the special
   usage by various device drivers.
 
-  Each child of the reserved-memory node specifies one or more regions
+  Each child of the reserved-memory node specifies one region
   of reserved memory. Each child node may either use a 'reg' property to
   specify a specific range of reserved memory, or a 'size' property with
   optional constraints to request a dynamically allocated block of
@@ -28,7 +28,8 @@ description: >
   is a static allocation.
 
 properties:
-  reg: true
+  reg:
+    maxItems: 1
 
   size:
     oneOf:
