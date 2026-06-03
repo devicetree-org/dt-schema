@@ -169,6 +169,7 @@ definitions:
     items:
       type: array
       minItems: 1
+      maxItems: 1024
       items:
         - oneOf:
             - type: integer

@@ -86,7 +86,7 @@ unit_types_matrix_re = re.compile('-(hz|microvolt)$')
 def _fixup_unit_suffix_props(subschema, path=[]):
     path.reverse()
     for idx, p in enumerate(path):
-        if p in {'properties', '$defs'}:
+        if p in {'properties', '$defs', 'definitions'}:
             propname = path[idx - 1]
             break
     else:
@@ -324,7 +324,7 @@ def fixup_sub_schema(schema, path=[]):
             for subschema in v:
                 fixup_sub_schema(subschema, path=path + [k])
 
-        if k not in ['dependentRequired', 'dependentSchemas', 'dependencies', 'properties', 'patternProperties', '$defs']:
+        if k not in ['dependentRequired', 'dependentSchemas', 'dependencies', 'properties', 'patternProperties', '$defs', 'definitions']:
             continue
 
         for prop in v:
