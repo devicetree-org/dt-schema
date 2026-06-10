@@ -500,25 +500,28 @@ class DTValidator:
             if p in ['dma-masters']:
                 continue
 
-            has_int = 0
-            has_array = 0
-            has_matrix = 0
+            int_sz = set()
+            array_sz = set()
+            matrix_sz = set()
+
             for v in val:
                 if v['type'] is None:
                     break
-                if re.match(r'u?int(8|16|32|64)$', v['type']):
-                    has_int += 1
-                elif re.match(r'u?int.+-array', v['type']):
-                    has_array += 1
-                elif re.match(r'u?int.+-matrix', v['type']):
-                    has_matrix += 1
-                    min_size = v['dim'][0][0] * v['dim'][1][0]
+                match = re.match(r'u?int(8|16|32|64)($|-(matrix|array)$)', v['type'])
+                if match:
+                    if match.group(3) == 'array':
+                        array_sz.add(int(match.group(1)))
+                    elif match.group(3) == 'matrix':
+                        matrix_sz.add(int(match.group(1)))
+                        min_size = v['dim'][0][0] * v['dim'][1][0]
+                    else:
+                        int_sz.add(int(match.group(1)))
                 elif v['type'] == 'phandle-array':
-                    has_matrix += 1
+                    matrix_sz.add(32)
                     min_size = v['dim'][0][0] * v['dim'][1][0]
 
-            if not ((has_int and (has_array or (has_matrix and min_size == 1))) or
-                    (has_array and has_matrix)):
+            if not ((int_sz & array_sz) or ((int_sz & matrix_sz) and min_size == 1) or
+                    (array_sz and matrix_sz)):
                 continue
 
             for v in val:
