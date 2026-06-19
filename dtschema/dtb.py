@@ -321,6 +321,7 @@ phandle_args = {
     'msi-ranges': '#interrupt-cells',
     'dma-masters': '#dma-cells',
     'gpio-ranges': 3,
+    'wakeup-source': 0,
 
     'memory-region': None,
 }
