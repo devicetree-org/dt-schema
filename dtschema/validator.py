@@ -118,7 +118,7 @@ def _extract_prop_type(props, schema, propname, subschema, is_pattern):
         return
 
     # handle matrix dimensions
-    if prop_type == 'phandle-array' or prop_type.endswith('-matrix'):
+    if (prop_type == 'phandle-array' or prop_type.endswith('-matrix')) and set(subschema) & {'items', 'minItems', 'maxItems'}:
         outer = _get_array_range(subschema)
         if 'items' in subschema:
             if isinstance(subschema['items'], list):
@@ -139,7 +139,10 @@ def _extract_prop_type(props, schema, propname, subschema, is_pattern):
             break
         if dim and \
            (p['type'] == 'phandle-array' or p['type'].endswith('-matrix')):
-            p['dim'] = _merge_dim(p['dim'], dim)
+            if 'dim' in p:
+                p['dim'] = _merge_dim(p['dim'], dim)
+            else:
+                p['dim'] = dim
             if schema['$id'] not in p['$id']:
                 p['$id'] += [schema['$id']]
             new_prop = None
@@ -513,12 +516,18 @@ class DTValidator:
                         array_sz.add(int(match.group(1)))
                     elif match.group(3) == 'matrix':
                         matrix_sz.add(int(match.group(1)))
-                        min_size = v['dim'][0][0] * v['dim'][1][0]
+                        if 'dim' in v:
+                            min_size = v['dim'][0][0] * v['dim'][1][0]
+                        else:
+                            min_size = 1
                     else:
                         int_sz.add(int(match.group(1)))
                 elif v['type'] == 'phandle-array':
                     matrix_sz.add(32)
-                    min_size = v['dim'][0][0] * v['dim'][1][0]
+                    if 'dim' in v:
+                        min_size = v['dim'][0][0] * v['dim'][1][0]
+                    else:
+                        min_size = 1
 
             if not ((int_sz & array_sz) or ((int_sz & matrix_sz) and min_size == 1) or
                     (array_sz and matrix_sz)):
