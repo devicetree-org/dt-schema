@@ -139,6 +139,12 @@ def prop_value(validator, nodename, p):
         elif p.name == "mode-gpios":
             # "mode-gpios" also matches "^mode-" pattern, but it is always a GPIO
             fmt = 'phandle-array'
+        elif p.name == "cooling-levels":
+            # "cooling-levels" is defined as both 8 and 32 bit, but values are less than 256 in 32-bit case
+            if data[0] == 0 and data[1] == 0:
+                fmt = 'uint32-array'
+            else:
+                fmt = 'uint8-array'
         elif {'string', 'string-array'} & prop_types:
             str = bytes_to_string(data)
             if str:
