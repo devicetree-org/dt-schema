@@ -136,6 +136,11 @@ def prop_value(validator, nodename, p):
             # Default for phandles, and then fixup later when we can more
             # reliably detect what is or isn't a phandle in fixup_handles()
             fmt = 'phandle-array'
+        elif p.name == "gpios":
+            if "hog" in nodename:
+                fmt = 'uint32-matrix'
+            else:
+                fmt = 'phandle-array'
         elif p.name == "mode-gpios":
             # "mode-gpios" also matches "^mode-" pattern, but it is always a GPIO
             fmt = 'phandle-array'
