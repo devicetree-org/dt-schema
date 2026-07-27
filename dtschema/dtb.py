@@ -177,7 +177,11 @@ def prop_value(validator, nodename, p):
                     dim = [[1, 1], [1, 1]]
         else:
             fmt = None
-    elif len(prop_types) == 1:
+
+    if not fmt and len(prop_types):
+        if len(prop_types) > 1:
+            print(f"{p.name}: property has multiple types: {prop_types}", file=sys.stderr)
+        # Just pick the first one
         fmt = prop_types.pop()
 
     if not fmt:
