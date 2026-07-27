@@ -94,6 +94,9 @@ def prop_value(validator, nodename, p):
     prop_types = set(validator.property_get_type(p.name))
     prop_types -= {'node'}
 
+    if not prop_types:
+        return data
+
     # Filter out types impossible for the size of the property
     if len(prop_types) > 1:
         if len(p) % 8:
@@ -185,20 +188,7 @@ def prop_value(validator, nodename, p):
         fmt = prop_types.pop()
 
     if not fmt:
-        # Primarily for aliases properties
-        try:
-            s = data.decode(encoding='ascii')
-            if s.endswith('\0'):
-                s = s[:-1]
-                if s.isprintable():
-                    return [s]
-        except:
-            pass
-        if not len(data) % 4:
-            fmt = 'uint32-array'
-        else:
-            #print(p.name + ': no type found', file=sys.stderr)
-            return data
+        return data
 
     if fmt.startswith('string'):
         if not data.endswith(b'\0'):
