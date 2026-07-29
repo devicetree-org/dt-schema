@@ -28,6 +28,7 @@ License: BSD-2-Clause. Author: Rob Herring <robh@kernel.org>.
 | `dtschema/` | The Python package: library modules, CLI `main()`s, and bundled `schemas/` + `meta-schemas/` data |
 | `dtschema/schemas/` | Core/common Devicetree binding schemas (constrain DT data) |
 | `dtschema/meta-schemas/` | Meta-schemas (constrain the binding schema files) |
+| `rust/` | Additive Rust reimplementation (Cargo workspace): the `dtschema` core lib + Linux-integrated CLIs under `cli/`, command-line-compatible with the corresponding Python tools. Python stays authoritative; the Rust tree ports its behaviour and differential-tests against it |
 | `test/` | Test suite `test-dt-validate.py`, `.dts` fixtures, example schemas under `test/schemas/` |
 | `tools/` | Standalone helper scripts: `dt-prop-populate`, `yaml-format`, `yaml2json` |
 | `.github/workflows/` | `ci.yml` (lint + test matrix) and `publish.yml` (PyPI on tags) |

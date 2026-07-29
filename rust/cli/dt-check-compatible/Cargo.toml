@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright 2026 dt-schema contributors
+[package]
+name = "dt-check-compatible"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "dt-check-compatible"
+path = "src/main.rs"
+
+[dependencies]
+dtschema.workspace = true
+clap.workspace = true
