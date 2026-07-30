@@ -154,3 +154,9 @@ On Debian/Ubuntu, the dependencies can be installed with apt and/or pip.
 ```
 sudo apt install python3 python3-jsonschema python3-libfdt python3-ruamel.yaml python3-rfc3987
 ```
+
+On Fedora, the dependencies can be installed with dnf.
+
+```bash
+sudo dnf install python3-devel python3-jsonschema python3-libfdt python3-ruamel-yaml python3-rfc3987
+```
