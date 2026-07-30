@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/net/pcs-consumer.yaml#
+$schema: http://devicetree.org/meta-schemas/base.yaml#
+
+title: PCS Consumer Common Properties
+
+maintainers:
+  - Christian Marangi <ansuelsmth@gmail.com>
+
+# always select the core schema
+select: true
+
+properties:
+  pcs-handle:
+    $ref: /schemas/types.yaml#/definitions/phandle-array
+
+  pcs-names:
+    $ref: /schemas/types.yaml#/definitions/string-array
+
+dependencies:
+  pcs-names: [ pcs-handle ]
+
+additionalProperties: true
