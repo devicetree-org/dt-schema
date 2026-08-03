@@ -144,6 +144,24 @@ class TestDTValidate(unittest.TestCase):
                 else:
                     self.assertIsNone(self.check_subtree('/', testtree[0]))
 
+    def test_validator_cache(self):
+        node = {
+            '$nodename': ['test'],
+            'compatible': ['vendor,soc1-ip'],
+            'vendor,int-prop': [4],
+        }
+        errors = [error.message for error in self.validator.iter_errors(node)]
+        schema_id = self.validator.compat_map['vendor,soc1-ip']
+        schema_validator = self.validator._schema_validators[schema_id]
+        select_validators = self.validator._select_validators.copy()
+
+        self.assertTrue(errors)
+        self.assertEqual(errors, [error.message for error in self.validator.iter_errors(node)])
+        self.assertIs(self.validator._schema_validators[schema_id], schema_validator)
+        self.assertEqual(self.validator._select_validators.keys(), select_validators.keys())
+        for select_id, validator in select_validators.items():
+            self.assertIs(self.validator._select_validators[select_id], validator)
+
     def test_json_error_diagnostic(self):
         error = jsonschema.ValidationError(
             "'foo' is a required property",
