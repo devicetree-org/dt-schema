@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright 2026 Arm Ltd.
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/mbox/mbox-controller.yaml#
+$schema: http://devicetree.org/meta-schemas/base.yaml#
+
+title: Mailbox Controller Common Properties
+
+maintainers:
+  - Rob Herring <robh@kernel.org>
+
+# always select the core schema
+select: true
+
+properties:
+  '#mbox-cells':
+    $ref: /schemas/types.yaml#/definitions/uint32
+    minimum: 0
+    description: >
+      Number of cells in a mailbox specifier.
+      When #mbox-cells is 0, the controller is a single-channel mailbox.
+      When #mbox-cells is 1, the cell typically contains the channel ID.
+
+additionalProperties: true
+
+examples:
+  - |
+    mailbox: mailbox {
+        #mbox-cells = <1>;
+    };
+...
