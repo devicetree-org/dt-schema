@@ -138,6 +138,8 @@ def prop_value(validator, nodename, p):
             prop_types -= {'uint8'}
 
     dim = validator.property_get_type_dim(p.name)
+    if p.name == 'iommu-map':
+        dim = None
     matrix_prop_types = { t for t in prop_types if 'matrix' in t or t == 'phandle-array' }
 
     if len(prop_types) > 1:
@@ -440,6 +442,39 @@ def fixup_phandles(validator, dt, path=''):
             i += cells
 
 
+def fixup_iommu_map(validator, dt, path=''):
+    for k, v in dt.items():
+        if isinstance(v, dict):
+            fixup_iommu_map(validator, v, path=path + '/' + k)
+            continue
+        elif k != 'iommu-map':
+            continue
+
+        map_cells = _get_cells_size(dt, '#iommu-cells')
+        if map_cells == 0:
+            map_cells = 1
+        i = 0
+        dt[k] = []
+        val = v[0]
+        phandle = val[map_cells]
+        if phandle == 0xffffffff:
+            # Assume uniform sizes (same provider)
+            try:
+                cells = val.index(0xffffffff, map_cells + 1) - map_cells
+            except ValueError:
+                cells = len(val)
+            while i < len(val):
+                dt[k] += [val[i:i + cells]]
+                i += cells
+        else:
+            while i < len(val):
+                p_cells = _get_cells_size(phandles[phandle], '#iommu-cells')
+
+                cells = map_cells + 1 + p_cells + 1
+                dt[k] += [val[i:i + cells]]
+                i += cells
+
+
 def fixup_gpios(dt):
     if 'gpio-hog' in dt:
         return
@@ -559,6 +594,7 @@ def fdt_unflatten(validator, dtb):
     fixup_gpios(dt)
     fixup_interrupts(dt, 1)
     fixup_addresses(validator, dt, 2, 1)
+    fixup_iommu_map(validator, dt)
     fixup_phandles(validator, dt)
 
 #    pprint.pprint(dt, compact=True)
