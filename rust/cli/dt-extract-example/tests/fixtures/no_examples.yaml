@@ -1,0 +1,6 @@
+---
+$id: http://devicetree.org/schemas/test2.yaml#
+title: Test2
+properties:
+  reg:
+    maxItems: 1
