@@ -176,11 +176,11 @@ def prop_value(validator, nodename, p):
                 fmt = scalar_prop_types.pop()
                 if dim:
                     min_dim = dim[1][0]
+                    if min_dim == 0:
+                        min_dim = 1
+                    min_dim *= dim[0][0]
                 else:
-                    min_dim = 0
-                if min_dim == 0:
                     min_dim = 1
-                min_dim *= dim[0][0]
                 #print(min_dim, type_format[fmt].size)
                 if len(p) / type_format[fmt].size >= min_dim:
                     fmt = matrix_prop_types.pop()
