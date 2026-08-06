@@ -90,6 +90,13 @@ properties:
 
       This random value should be provided by bootloader.
 
+  logo:
+    type: object
+    description:
+      A boot logo supplied by firmware, as an image the operating system can
+      draw once it owns the display. The contents are described by the
+      binding matching the node's compatible string.
+
   linux,booted-from-kexec:
     type: boolean
     description:
