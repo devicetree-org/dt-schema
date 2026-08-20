@@ -25,6 +25,10 @@ description: >
   While various legacy interrupt names exist, new devices should use "wakeup" as
   the canonical interrupt name.
 
+  Nodes with the wakeup capability and out-of-band wakeup capability may
+  contain a "out-band-wakeup" property in addition to the "wakeup-source"
+  property.
+
 maintainers:
   - Rob Herring <robh@kernel.org>
 
@@ -40,6 +44,17 @@ properties:
         description:
           List of phandles to system idle state nodes. The device can be a
           wakeup source in the given system states.
+  out-band-wakeup:
+    type: boolean
+    description:
+      The device is out-of-band wakeup capable.
+
+if:
+  required:
+    - out-band-wakeup
+then:
+  required:
+    - wakeup-source
 
 additionalProperties: true
 
@@ -80,11 +95,13 @@ examples:
     };
   - |
     # With power states specified
+    # out-of-band wakeup capable
     mcu_mcan0: can@4e08000 {
         compatible = "bosch,m_can";
         reg = <0x00 0x4e08000 0x00 0x200>,
               <0x00 0x4e00000 0x00 0x8000>;
         reg-names = "m_can", "message_ram";
+        out-band-wakeup;
         wakeup-source = <&system_partial_io>, <&system_deep_sleep>;
     };
 ...
