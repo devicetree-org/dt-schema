@@ -58,4 +58,17 @@ properties:
       the OS, in order to handle a stalled transaction, may attempt to retrieve
       pages from secondary storage in a stalled domain, leading to a deadlock.
 
+  iommu-ranges:
+    description: >
+      Address and length pairs describing the IOVA ranges that are usable
+      for DMA memory mapping to the device. Any IOVA range not covered by
+      this property will not be used by the IOMMU allocator for the device.
+      The format of each entry depends on the device's parent
+      "#address-cells" and "#size-cells".
+
+      This property is optional and only required if a device is restricted
+      to using specific IOVA regions for DMA memory mapping. Otherwise, this
+      property should be omitted.
+    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+
 additionalProperties: true
