@@ -252,17 +252,17 @@ def fixup_interrupts(schema, path):
             schema['properties']['interrupts-extended'] = copy.deepcopy(schema['properties']['interrupts'])
 
     if 'required' in schema and 'interrupts' in schema['required'] and \
-       (len(path) == 0 or path[-1] != 'oneOf'):
+       (len(path) == 0 or path[-1] not in ['oneOf', 'anyOf']):
         # Currently no better way to express either 'interrupts' or 'interrupts-extended'
         # is required. If this fails validation, the error reporting is the whole
         # schema file fails validation
         reqlist = [{'required': ['interrupts']}, {'required': ['interrupts-extended']}]
-        if 'oneOf' in schema:
+        if 'anyOf' in schema:
             if 'allOf' not in schema:
                 schema['allOf'] = []
-            schema['allOf'].append({'oneOf': reqlist})
+            schema['allOf'].append({'anyOf': reqlist})
         else:
-            schema['oneOf'] = reqlist
+            schema['anyOf'] = reqlist
         schema['required'].remove('interrupts')
         if len(schema['required']) == 0:
             schema.pop('required')
@@ -278,7 +278,7 @@ def fixup_interrupts(schema, path):
                 continue
             schema['dependentSchemas'] = {}
             schema['dependentSchemas'][prop] = {
-                'oneOf': [
+                'anyOf': [
                     {'required': ['interrupts']},
                     {'required': ['interrupts-extended']},
                 ]
