@@ -115,13 +115,8 @@ oneOf:
   - required:
       - size
 
-  - if:
-      required:
-        - iommu-addresses
-
-    then:
-      required:
-        - reg
+dependentRequired:
+  iommu-addresses: [reg]
 
 additionalProperties: true
 
