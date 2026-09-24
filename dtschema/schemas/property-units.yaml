@@ -110,6 +110,9 @@ patternProperties:
   "-microwatt-hours$":
     $ref: types.yaml#/definitions/uint32-array
     description: microwatt hour
+  "-millivolt$":
+    $ref: types.yaml#/definitions/uint32-array
+    description: millivolt
   "-microvolt$":
     $ref: types.yaml#/definitions/int32-matrix
     description: microvolt
