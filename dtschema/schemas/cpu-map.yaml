@@ -13,10 +13,11 @@ maintainers:
   - devicetree-spec@vger.kernel.org
 
 description: |
-  In a SMP system, the hierarchy of CPUs is defined through three entities that
+  In a SMP system, the hierarchy of CPUs is defined through five entities that
   are used to describe the layout of physical CPUs in the system:
 
   - socket
+  - die
   - cluster
   - core
   - thread
@@ -50,27 +51,33 @@ description: |
   child of the cpus node and provides a container where the actual topology
   nodes are listed.
 
-  The cpu-map node can only contain 4 types of child nodes:
+  The cpu-map node can only contain 5 types of child nodes:
 
   - socket node
+  - die node
   - cluster node
   - core node
   - thread node
 
-  The nodes describing the CPU topology (socket/cluster/core/thread) can
+  The nodes describing the CPU topology (socket/die/cluster/core/thread) can
   only be defined within the cpu-map node and every core/thread in the
   system must be defined within the topology.  Any other configuration is
   invalid and therefore must be ignored.
+
+  Die nodes are optional. A system that describes multiple physical dies in
+  one socket places die nodes between the socket and cluster levels. A
+  single-socket system may omit the socket node and place die nodes directly
+  below cpu-map. Die topology and NUMA node association are independent.
 
   ===========================================
   2.1 - cpu-map child nodes naming convention
   ===========================================
 
   cpu-map child nodes must follow a naming convention where the node name
-  must be "socketN", "clusterN", "coreN", "threadN" depending on the node type
-  (ie socket/cluster/core/thread) (where N = {0, 1, ...} is the node number; nodes
-  which are siblings within a single common parent node must be given a unique and
-  sequential N value, starting from 0).
+  must be "socketN", "dieN", "clusterN", "coreN", "threadN" depending on the
+  node type (ie socket/die/cluster/core/thread) (where N = {0, 1, ...} is the
+  node number; nodes which are siblings within a single common parent node must
+  be given a unique and sequential N value, starting from 0).
   cpu-map child nodes which do not share a common parent node can have the same
   name (ie same number N as other cpu-map child nodes at different device tree
   levels) since name uniqueness will be guaranteed by the device tree hierarchy.
@@ -85,6 +92,28 @@ description: |
   [4] https://www.devicetree.org/specifications/
 
 $defs:
+  socket:
+    description: A physical socket containing CPU dies or clusters.
+    type: object
+    oneOf:
+      - additionalProperties: false
+        patternProperties:
+          '^die[0-9]+$':
+            $ref: '#/$defs/die'
+        required:
+          - die0
+      - $ref: '#/$defs/cluster'
+
+  die:
+    description: A physical die containing one or more CPU clusters.
+    type: object
+    additionalProperties: false
+    patternProperties:
+      '^cluster[0-9]+$':
+        $ref: '#/$defs/cluster'
+    required:
+      - cluster0
+
   cluster:
     type: object
     oneOf:
@@ -116,12 +145,17 @@ properties:
     const: cpu-map
 
 patternProperties:
-  '^(socket|cluster)[0-9]+$':
+  '^socket[0-9]+$':
+    $ref: '#/$defs/socket'
+  '^die[0-9]+$':
+    $ref: '#/$defs/die'
+  '^cluster[0-9]+$':
     $ref: '#/$defs/cluster'
     description: |
       The cpu-map node's child nodes can be:
 
       - one or more cluster nodes or
+      - one or more die nodes in a single-socket system or
       - one or more socket nodes in a multi-socket system. A system can
         contain single or multiple physical socket.
         The association of sockets and NUMA nodes is beyond the scope of this
@@ -130,6 +164,52 @@ patternProperties:
 additionalProperties: false
 
 examples:
+  - |
+    // 8-cpu system with two dies in a single physical socket
+    cpu-map {
+        socket0 {
+            die0 {
+                cluster0 {
+                    core0 {
+                        cpu = <&CPU0>;
+                    };
+                    core1 {
+                        cpu = <&CPU1>;
+                    };
+                };
+
+                cluster1 {
+                    core0 {
+                        cpu = <&CPU2>;
+                    };
+                    core1 {
+                        cpu = <&CPU3>;
+                    };
+                };
+            };
+
+            die1 {
+                cluster0 {
+                    core0 {
+                        cpu = <&CPU4>;
+                    };
+                    core1 {
+                        cpu = <&CPU5>;
+                    };
+                };
+
+                cluster1 {
+                    core0 {
+                        cpu = <&CPU6>;
+                    };
+                    core1 {
+                        cpu = <&CPU7>;
+                    };
+                };
+            };
+        };
+    };
+
   - |
     # 16-cpu system, two clusters of clusters in a single physical socket
     cpu-map {
