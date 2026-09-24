@@ -32,6 +32,7 @@ properties:
       - embedded
       - television
       - spectacles
+      - headset
   '#address-cells':
     enum: [1, 2]
   '#size-cells':
