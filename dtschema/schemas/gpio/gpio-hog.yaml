@@ -36,6 +36,9 @@ properties:
   line-name:
     $ref: /schemas/types.yaml#/definitions/string
 
+  gpio-line-name:
+    $ref: /schemas/types.yaml#/definitions/string
+
   output-high:
     $ref: /schemas/types.yaml#/definitions/flag
 

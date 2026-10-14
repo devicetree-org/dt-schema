@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/gpio/gpio-line.yaml#
+$schema: http://devicetree.org/meta-schemas/base.yaml#
+
+title: GPIO Line Nodes
+
+description: Schema for GPIO line initialization devicetree bindings
+
+maintainers:
+  - Rob Herring <robh@kernel.org>
+
+# select this schema for GPIO line setup nodes
+select:
+  properties:
+    gpio-line: true
+
+  required:
+    - gpio-line
+
+properties:
+  $nodename:
+    pattern: "-line(-[0-9]+)?$"
+
+  gpio-line:
+    $ref: /schemas/types.yaml#/definitions/flag
+
+  gpios:
+    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+
+  input:
+    $ref: /schemas/types.yaml#/definitions/flag
+
+  output-high:
+    $ref: /schemas/types.yaml#/definitions/flag
+
+  output-low:
+    $ref: /schemas/types.yaml#/definitions/flag
+
+  gpio-line-name:
+    $ref: /schemas/types.yaml#/definitions/string
+
+required:
+  - gpio-line
+  - gpios
+
+additionalProperties: false
