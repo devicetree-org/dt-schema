@@ -85,4 +85,23 @@ properties:
     description:
       Include this node in all phases (for U-Boot see enum u_boot_phase).
 
+allOf:
+  - if:
+      anyOf:
+        - required: [ bootph-pre-sram ]
+        - required: [ bootph-verify ]
+        - required: [ bootph-pre-ram ]
+        - required: [ bootph-some-ram ]
+        - required: [ bootph-all ]
+    then:
+      description: Parent nodes don't need bootph tags
+      patternProperties:
+        '.*':
+          properties:
+            bootph-pre-sram: false
+            bootph-verify: false
+            bootph-pre-ram: false
+            bootph-some-ram: false
+            bootph-all: false
+
 additionalProperties: true
