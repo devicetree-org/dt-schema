@@ -152,8 +152,8 @@ def prop_value(validator, nodename, p):
                 fmt = 'uint32-matrix'
             else:
                 fmt = 'phandle-array'
-        elif p.name == "mode-gpios":
-            # "mode-gpios" also matches "^mode-" pattern, but it is always a GPIO
+        elif p.name.startswith("mode-") and p.name.endswith("-gpios"):
+            # "mode(-.*)?-gpios" also matches reboot-mode patterns, make sure it's treated as GPIO.
             fmt = 'phandle-array'
         elif p.name == "cooling-levels":
             # "cooling-levels" is defined as both 8 and 32 bit, but values are less than 256 in 32-bit case
