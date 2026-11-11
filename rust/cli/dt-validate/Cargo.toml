@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright 2026 dt-schema contributors
+[package]
+name = "dt-validate"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "dt-validate"
+path = "src/main.rs"
+
+[dependencies]
+dtschema.workspace = true
+clap.workspace = true
+argfile.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+rayon.workspace = true

@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: BSD-2-Clause
+// Copyright 2026 dt-schema contributors
+/dts-v1/;
+/plugin/; // silence any missing phandle references
+/ {
+	model = "none";
+	compatible = "none";
+
+	#address-cells = <2>;
+	#size-cells = <1>;
+
+	bus@1000 {
+		compatible = "simple-bus";
+		reg = <0 0x1000 0x4000>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges = <0 0 0x1000 0x4000>;
+
+		child@100 {
+			reg = <0x100 0x20>;
+		};
+	};
+};
