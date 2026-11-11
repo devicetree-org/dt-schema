@@ -16,9 +16,16 @@ select: true
 properties:
   # Recommended node names: (|usb-|usb2-|usb3-|pci-|pcie-|sata-)phy
 
-  '#phy-cells': true
+  '#phy-cells':
+    description:
+      Number of cells in a PHY specifier. The meaning of the cells is defined
+      by the binding for the PHY provider node. The PHY provider uses the
+      values in the cells to find the appropriate PHY.
 
-  phy-supply: true
+  phy-supply:
+    description:
+      Phandle to a regulator that provides power to the PHY. This regulator is
+      managed during the PHY power on/off sequence.
 
   phy-type:
     description: Some PHYs can operate in multiple modes. This sets the operating

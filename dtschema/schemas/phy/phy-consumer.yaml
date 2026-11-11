@@ -8,6 +8,11 @@ $schema: http://devicetree.org/meta-schemas/base.yaml#
 
 title: PHY Consumer Common Properties
 
+description:
+  Properties used by devices which reference generic PHYs (as handled by the
+  Linux PHY subsystem). Not to be confused with the Ethernet specific 'phy'
+  and 'phy-handle' properties.
+
 maintainers:
   - Rob Herring <robh@kernel.org>
 
@@ -17,11 +22,19 @@ select: true
 properties:
   phys:
     $ref: /schemas/types.yaml#/definitions/phandle-array
+    description:
+      List of PHYs used by the device. Each entry in the list is a phandle
+      pointing to a PHY provider followed by the number of cells specified by
+      the provider's '#phy-cells' property.
 
   phy-names:
     $ref: /schemas/types.yaml#/definitions/string-array
+    description:
+      List of names corresponding to the PHYs in the 'phys' list.
 
 dependencies:
   phy-names: [ phys ]
 
 additionalProperties: true
+
+...
