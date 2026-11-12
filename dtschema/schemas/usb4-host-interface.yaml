@@ -1,0 +1,40 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/usb4-host-interface.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: USB4-tunneled native protocol controller properties.
+
+description:
+  The USB4 protocol allows for tunneling of other protocols through
+  encapsulation.
+  A system implementing a USB4 host router contains both the native protocol
+  controllers and a USB4 router. The host router contains a number of protocol
+  adapters (as defined in the USB4 specification), which convert the traffic
+  between the tunneled packets and native signaling.
+
+maintainers:
+  - Konrad Dybcio <konradybcio@kernel.org>
+
+select: true
+
+properties:
+  usb4-host-interface:
+    $ref: /schemas/types.yaml#/definitions/phandle
+    description:
+      Phandle to the USB4 router this device is connected to.
+
+additionalProperties: true
+
+examples:
+  - |
+    usb@10000 {
+        compatible = "vendor,device-id";
+        reg = <0x10000 0x1000>;
+
+        usb4-host-interface = <&usb4_router0>;
+    };
+
+...
