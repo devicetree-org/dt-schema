@@ -74,9 +74,10 @@ As a developer you normally will not need to write metaschema files.
 Devicetree Meta-Schema files are normal YAML files using the jsonschema vocabulary.
 
 ## Usage
-There are several tools available in the *tools/* directory.
+Several command line tools are installed along with the package (see
+`[project.scripts]` in `pyproject.toml`).
 
-`tools/dt-doc-validate`
+`dt-doc-validate`
 This tool takes a schema file(s) or directory of schema files and validates
 them against the DT meta-schema.
 
@@ -85,7 +86,7 @@ Example:
 dt-doc-validate -u test/schemas test/schemas/good-example.yaml
 ```
 
-`tools/dt-mk-schema`
+`dt-mk-schema`
 This tool takes user-provided schema file(s) plus the core schema files in this
 repo, removes everything not needed for validation, applies fix-ups to the
 schemas, and outputs a single file with the processed schema. This step
@@ -97,7 +98,7 @@ Example:
 dt-mk-schema -j test/schemas/ > processed-schema.json
 ```
 
-`tools/dt-validate`
+`dt-validate`
 This tool takes user-provided Devicetree(s) and either a schema directory
 or a pre-processed schema file from `dt-mk-schema`, and then validates the
 Devicetree against the schema.
@@ -108,7 +109,7 @@ dtc -O dtb -o device.dtb test/device.dts
 dt-validate -s processed-schema.json device.dtb
 ```
 
-`tools/dt-check-compatible`
+`dt-check-compatible`
 This tool tests whether a list of compatible strings are found or not in
 the schemas. By default, a compatible string is printed when it matches
 one (or a pattern) in the schemas.
