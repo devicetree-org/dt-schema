@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: BSD-2-Clause
+---
+$id: http://devicetree.org/schemas/net/pcs-provider.yaml#
+$schema: http://devicetree.org/meta-schemas/base.yaml#
+
+title: PCS Provider Common Properties
+
+maintainers:
+  - Christian Marangi <ansuelsmth@gmail.com>
+
+# always select the core schema
+select: true
+
+properties:
+  '#pcs-cells': true
+
+additionalProperties: true
+
+...
