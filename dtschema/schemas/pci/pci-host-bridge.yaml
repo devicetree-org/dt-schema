@@ -21,6 +21,12 @@ allOf:
   - $ref: pci-iommu.yaml#
 
 properties:
+  ats-supported:
+    description:
+      Indicates that a PCIe host controller supports ATS, and can handle Memory
+      Requests with Address Type (AT).
+    type: boolean
+
   linux,pci-domain:
     description:
       If present this property assigns a fixed PCI domain number to a host bridge,
