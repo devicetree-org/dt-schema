@@ -476,7 +476,7 @@ def fixup_iommu_map(validator, dt, path=''):
 
 
 def fixup_gpios(dt):
-    if 'gpio-hog' in dt:
+    if 'gpio-hog' in dt or 'gpio-line' in dt:
         return
     for k, v in dt.items():
         if isinstance(v, dict):
