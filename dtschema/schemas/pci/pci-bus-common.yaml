@@ -121,7 +121,7 @@ properties:
       unnecessary operation for unsupported link speed, for instance, trying to
       do training for unsupported link speed, etc.
     $ref: /schemas/types.yaml#/definitions/uint32
-    enum: [ 1, 2, 3, 4 ]
+    enum: [ 1, 2, 3, 4, 5, 6, 7 ]
 
   num-lanes:
     description: The number of PCIe lanes
